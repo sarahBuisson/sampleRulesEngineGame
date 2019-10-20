@@ -1,0 +1,11 @@
+**/.gradle/*
+.idea
+**/build/*
+**/target
+.git/*
+*.iml
+**/node_modules
+**/dist
+**/public
+build
+.gradle

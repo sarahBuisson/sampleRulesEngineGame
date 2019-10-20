@@ -1,0 +1,70 @@
+{
+  "name": "mower-site",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run startClient",
+    "startClient": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "build": "npm run buildClient",
+    "buildClient": "webpack --mode production --config webpack.config.js",
+    "test": "jest --coverage",
+    "postinstall": "install-jar-dependency"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-syntax-throw-expressions": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.5",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^2.1.1",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "jest": "^24.8.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "2.1.3",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.3.1",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.4.4",
+    "@koa/cors": "^2.2.3",
+    "axios": "^0.18.0",
+    "d3": "^5.7.0",
+    "d3-force": "^2.0.1",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "kotlin": "1.3.40",
+    "lodash": "^4.17.15",
+    "react-redux": "^7.0.3",
+    "react-router-dom": "^5.0.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "request": "^2.88.0",
+    "style-loader": "^0.23.1",
+    "uuid": "^3.3.2"
+  },
+  "mavenDependencies": {
+    "kotlin-logging": "io.github.microutils:kotlin-logging-js:1.6.22",
+    "kotlin-stdlib-js": "org.jetbrains.kotlin:kotlin-stdlib-js:1.3.41",
+    "kotlinx-serialization-kotlinx-serialization-runtime": "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.11.1"
+  },
+  "jarDependencies": {
+    "easy-rules-core": "/Users/sbuisson/.m2/repository/org/jeasy/easy-rules-core-js/3.2.4/easy-rules-core-js-3.2.4.jar",
+    "easy-rules-kotlin-easy-rules-core": "/Users/sbuisson/.m2/repository/org/jeasy/easy-rules-core-js/3.2.4/easy-rules-core-js-3.2.4.jar",
+    "sudoku": "../sudokuRules/build/libs/sudokuRules-js-1.0-SNAPSHOT.jar",
+    "labyrinth": "../labyrinth/build/libs/labyrinth-js-1.0-SNAPSHOT.jar"
+  },
+  "description": ""
+}
