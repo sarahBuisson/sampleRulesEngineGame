@@ -35,8 +35,8 @@ fun <T : ZoneOfCoridor> drawComplexCoridorH(board: Board<out T>, begin: PointImp
 }
 
 private fun <T : ZoneOfCoridor> complexifyCoridor(
-    coridor: List<out T>,
-    board: Board<out T>
+        coridor: List<out T>,
+        board: Board<out T>
 ): List<T> {
     var coridor1 = coridor
     coridor1.forEach {
@@ -46,8 +46,8 @@ private fun <T : ZoneOfCoridor> complexifyCoridor(
 }
 
 private fun <T : ZoneOfCoridor> complexifyRandomlyCoridor(
-    coridor: List<out T>,
-    board: Board<out T>
+        coridor: List<out T>,
+        board: Board<out T>
 ): List<T> {
     var coridor1 = coridor
     var size = coridor1.size - 1
@@ -77,12 +77,12 @@ fun <T : ZoneOfCoridor> addComplexityToCoridorAtElement(board: Board<out T>, cor
     var endExtension = board.get(endComplexity.add(randomDir));
 
     var extentionExistAndNotAlreadyOnCoridor =
-        beginExtension != null && endExtension != null && !coridor.contains(beginExtension) && !coridor.contains(
-            endExtension
-        )
+            beginExtension != null && endExtension != null && !coridor.contains(beginExtension) && !coridor.contains(
+                    endExtension
+            )
     while (extentionExistAndNotAlreadyOnCoridor && randomLen > 0) {
         coridor =
-            insertAfter(coridor, beginComplexity, beginExtension!!, endExtension!!)
+                insertAfter(coridor, beginComplexity, beginExtension!!, endExtension!!)
 
         //the newly added extension becomme the new start of the added complexity, so the complexityContinueToGrow
         beginComplexity = beginExtension;
@@ -91,9 +91,9 @@ fun <T : ZoneOfCoridor> addComplexityToCoridorAtElement(board: Board<out T>, cor
         endExtension = board.get(endComplexity.add(randomDir));
         randomLen--;
         extentionExistAndNotAlreadyOnCoridor =
-            beginExtension != null && endExtension != null && !coridor.contains(beginExtension) && !coridor.contains(
-                endExtension
-            )
+                beginExtension != null && endExtension != null && !coridor.contains(beginExtension) && !coridor.contains(
+                        endExtension
+                )
     }
 
 
@@ -107,24 +107,24 @@ fun <T : ZoneOfCoridor> addDeadEndToElementOfCoridor(board: Board<T>, element: T
     var beginComplexity = element;
     var randomDir = Direction.values().random().times(1)
 
-    var randomLen = (1..board.content.size).random()+2
+    var randomLen = (1..board.content.size).random() + 2
 
 
     var beginExtension = board.get(beginComplexity.add(randomDir))
 
     var extentionExistAndNotAlreadyOnCoridor = beginExtension != null && !deadEnd.contains(beginExtension)
-            && beginExtension.haveBeenVisited==0;
+            && beginExtension.haveBeenVisited == 0;
 
     while (extentionExistAndNotAlreadyOnCoridor && randomLen > 0) {
         deadEnd.add(beginExtension!!)
 
         //the newly added extension becomme the new start of the added complexity, so the complexityContinueToGrow
         beginComplexity = beginExtension;
-         beginExtension = board.get(beginComplexity.add(randomDir))
+        beginExtension = board.get(beginComplexity.add(randomDir))
 
         randomLen--;
         extentionExistAndNotAlreadyOnCoridor = beginExtension != null && !deadEnd.contains(beginExtension)
-                && beginExtension.haveBeenVisited==0;
+                && beginExtension.haveBeenVisited == 0;
 
     }
 
@@ -145,6 +145,7 @@ class ZoneOfCoridor(x: Int, y: Int) : BoardZoneImpl(x, y) {
     override fun toString(): String {
         return "" + haveBeenVisited
     }
+
     val opens = mutableListOf<Direction>()
 }
 
@@ -153,11 +154,10 @@ fun drawLabyrinth(board: Board<ZoneOfCoridor>): MutableList<List<ZoneOfCoridor>>
     val coridors = mutableListOf<List<ZoneOfCoridor>>();
 
 
-
     var solution = drawDirectCoridorH(
-        board,
-        PointImpl(2, 2),
-        PointImpl(size - 2, size - 2)
+            board,
+            PointImpl(2, 2),
+            PointImpl(size - 2, size - 2)
     )
 
 

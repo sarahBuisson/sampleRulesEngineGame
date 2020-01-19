@@ -6,12 +6,11 @@ import fr.perso.skyscraper.SkyScraperGrid
 import org.jeasy.rules.api.Rules
 import org.junit.Test
 
-class SkyCraperGenerateIT{
-
+class SkyCraperGenerateIT {
 
 
     @Test
-    fun generateAndResolveGrid(){
+    fun generateAndResolveGrid() {
         val gridGenerated = SkyScraperGrid(5, initPossibleValues(5));
 
         GenerationSkyScraperGrid().run(gridGenerated)
@@ -20,7 +19,7 @@ class SkyCraperGenerateIT{
         gridGenerated.groups.forEachIndexed { index, skyScraperLine ->
 
 
-            gridToResolve.groups[index].view=skyScraperLine.view
+            gridToResolve.groups[index].view = skyScraperLine.view
 
         }
 
@@ -33,7 +32,7 @@ class SkyCraperGenerateIT{
 
 
     @Test
-    fun generateAndResolveGrid6(){
+    fun generateAndResolveGrid6() {
         val gridGenerated = SkyScraperGrid(6, initPossibleValues(6));
 
         runBook(gridGenerated, Rules(setOf(GenerationSkyScraperGrid())))
@@ -42,7 +41,7 @@ class SkyCraperGenerateIT{
         gridGenerated.groups.forEachIndexed { index, skyScraperLine ->
 
 
-            gridToResolve.groups[index].view=skyScraperLine.view
+            gridToResolve.groups[index].view = skyScraperLine.view
 
         }
 
@@ -58,7 +57,7 @@ class SkyCraperGenerateIT{
 
 
     @Test
-    fun generateAndResolveGrid5(){
+    fun generateAndResolveGrid5() {
         val gridGenerated = SkyScraperGrid(5, initPossibleValues(5));
 
         runBook(gridGenerated, Rules(setOf(GenerationSkyScraperGrid())))
@@ -67,7 +66,7 @@ class SkyCraperGenerateIT{
         gridGenerated.groups.forEachIndexed { index, skyScraperLine ->
 
 
-            gridToResolve.groups[index].view=skyScraperLine.view
+            gridToResolve.groups[index].view = skyScraperLine.view
 
         }
 
@@ -84,7 +83,7 @@ class SkyCraperGenerateIT{
 
 
     @Test
-    fun generateAndResolveGrid6Perimeter(){
+    fun generateAndResolveGrid6Perimeter() {
         val gridSize = 7
         val gridGenerated = SkyScraperGrid(gridSize, initPossibleValues(gridSize));
 
@@ -94,7 +93,7 @@ class SkyCraperGenerateIT{
         gridGenerated.groups.forEachIndexed { index, skyScraperLine ->
 
 
-            gridToResolve.groups[index].view=skyScraperLine.view
+            gridToResolve.groups[index].view = skyScraperLine.view
 
         }
 

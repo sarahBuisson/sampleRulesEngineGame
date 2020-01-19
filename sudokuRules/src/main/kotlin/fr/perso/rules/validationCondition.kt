@@ -9,7 +9,7 @@ data class UnicityError<T>(val value: T, val locations: List<SCase<T>>) {
 }
 
 
-fun <T>respectUnicity(ensemble: Iterable<SCase<T>>, values: List<T>): List<UnicityError<T>> {
+fun <T> respectUnicity(ensemble: Iterable<SCase<T>>, values: List<T>): List<UnicityError<T>> {
 
     return values.map { value ->
 
@@ -28,7 +28,7 @@ data class PresenceError<T>(val value: T) {
     override fun toString() = "$value not found"
 }
 
-fun <T>respectPresence(ensemble: Collection<SCase<T>>, values: List<T>): List<PresenceError<T>> {
+fun <T> respectPresence(ensemble: Collection<SCase<T>>, values: List<T>): List<PresenceError<T>> {
 
     return values.map { value ->
         if (ensemble.none { case -> case.getValue() == value }) {
@@ -41,7 +41,7 @@ fun <T>respectPresence(ensemble: Collection<SCase<T>>, values: List<T>): List<Pr
 
 }
 
-fun <T>respectPossiblePresence(ensemble: Iterable<SCasePossible<T>>, values: List<T>): List<PresenceError<T>> {
+fun <T> respectPossiblePresence(ensemble: Iterable<SCasePossible<T>>, values: List<T>): List<PresenceError<T>> {
 
     return values.map { value ->
         if (ensemble.flatMap { it.getPossibles() }.none { cv -> cv == value }) {

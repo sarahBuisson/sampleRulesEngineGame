@@ -6,7 +6,7 @@ import fr.perso.skyscraper.SkyScraperGrid
 import org.jeasy.rules.api.Rules
 import org.junit.Test
 
-class SkyscraperIT{
+class SkyscraperIT {
 
 
     @Test

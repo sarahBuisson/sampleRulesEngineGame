@@ -11,58 +11,57 @@ import kotlin.test.assertEquals
 class SkyscraperGridResolveTest {
 
 
-
     @Test
-    fun removePossi(){
-        val gridGenerated = SkyScraperGrid(5,initPossibleValues(5));
-        val line=gridGenerated.column1.first()
+    fun removePossi() {
+        val gridGenerated = SkyScraperGrid(5, initPossibleValues(5));
+        val line = gridGenerated.column1.first()
 
-        line.view=1
+        line.view = 1
         runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
         println(line)
-        line.view=2
+        line.view = 2
         runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
         println(line)
-        line.view=3
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
-        println(line)
-
-        line.view=4
+        line.view = 3
         runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
         println(line)
 
+        line.view = 4
+        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        println(line)
 
-        line.view=5
+
+        line.view = 5
         runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
         println(line)
     }
 
     @Test
-    fun removePossi6(){
-        val gridGenerated = SkyScraperGrid(6,initPossibleValues(6));
-        val line=gridGenerated.column1.first()
+    fun removePossi6() {
+        val gridGenerated = SkyScraperGrid(6, initPossibleValues(6));
+        val line = gridGenerated.column1.first()
 
-        line.view=1
+        line.view = 1
         runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
         println(line)
 
 
-        line.view=2
+        line.view = 2
         runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
         println(line)
-        line.view=3
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
-        println(line)
-
-        line.view=4
+        line.view = 3
         runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
         println(line)
 
-
-        line.view=5
+        line.view = 4
         runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
         println(line)
-        line.view=6
+
+
+        line.view = 5
+        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        println(line)
+        line.view = 6
         runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
         println(line)
 
@@ -70,47 +69,47 @@ class SkyscraperGridResolveTest {
 
 
     @Test
-    fun shouldBeVisible(){
-        val gridGenerated = SkyScraperGrid(5,initPossibleValues(5));
-        val line=gridGenerated.column1.first()
+    fun shouldBeVisible() {
+        val gridGenerated = SkyScraperGrid(5, initPossibleValues(5));
+        val line = gridGenerated.column1.first()
 
-        line.view=2
+        line.view = 2
         line.get(3).setValue(5)
         runBook(line, Rules(setOf(
 
-            RemoveSureValueFromTheRestOfTheGroup(),
-            ComplexeVisiblePossibleRule()
+                RemoveSureValueFromTheRestOfTheGroup(),
+                ComplexeVisiblePossibleRule()
         )))
         println(line)
 
     }
 
     @Test
-    fun shouldBeVisible2(){
-        val gridGenerated = SkyScraperGrid(5,initPossibleValues(5));
-        val line=gridGenerated.column1.first()
+    fun shouldBeVisible2() {
+        val gridGenerated = SkyScraperGrid(5, initPossibleValues(5));
+        val line = gridGenerated.column1.first()
 
-        line.view=2
+        line.view = 2
         line.get(1).setValue(5)
         runBook(line, Rules(setOf(
 
-            RemoveSureValueFromTheRestOfTheGroup(),
-            ComplexeVisiblePossibleRule())))
+                RemoveSureValueFromTheRestOfTheGroup(),
+                ComplexeVisiblePossibleRule())))
         println(line)
 
     }
 
     @Test
-    fun shouldBeVisible3(){
-        val gridGenerated = SkyScraperGrid(5,initPossibleValues(5));
-        val line=gridGenerated.column1.first()
+    fun shouldBeVisible3() {
+        val gridGenerated = SkyScraperGrid(5, initPossibleValues(5));
+        val line = gridGenerated.column1.first()
 
-        line.view=3
+        line.view = 3
         line.get(4).setValue(5)
         runBook(line, Rules(setOf(
-            RemovePossibleForViewGroup(),
-            RemoveSureValueFromTheRestOfTheGroup(),
-            ComplexeVisiblePossibleRule())))
+                RemovePossibleForViewGroup(),
+                RemoveSureValueFromTheRestOfTheGroup(),
+                ComplexeVisiblePossibleRule())))
 
         println(line)
 
@@ -118,11 +117,11 @@ class SkyscraperGridResolveTest {
 
 
     @Test
-    fun shouldResolved4(){
-        val gridGenerated = SkyScraperGrid(5,initPossibleValues(5));
-        val line=gridGenerated.column1.first()
+    fun shouldResolved4() {
+        val gridGenerated = SkyScraperGrid(5, initPossibleValues(5));
+        val line = gridGenerated.column1.first()
 
-        line.view=4
+        line.view = 4
         line.get(3).setValue(5)
         line.get(4).setValue(4)
         runBook(line, ResolveSkyScraperGrid().groupeRules as Rules<SkyScraperLine>)
@@ -131,11 +130,11 @@ class SkyscraperGridResolveTest {
     }
 
     @Test
-    fun shouldResolved3(){
-        val gridGenerated = SkyScraperGrid(5,initPossibleValues(5));
-        val line=gridGenerated.column1.first()
+    fun shouldResolved3() {
+        val gridGenerated = SkyScraperGrid(5, initPossibleValues(5));
+        val line = gridGenerated.column1.first()
 
-        line.view=3
+        line.view = 3
         line.get(3).setValue(5)
         line.get(4).setValue(4)
         runBook(line, ResolveSkyScraperGrid().groupeRules as Rules<SkyScraperLine>)

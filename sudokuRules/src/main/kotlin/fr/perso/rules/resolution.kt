@@ -21,8 +21,8 @@ fun onePossibiliteSet(case: SCasePossible<Any>) {
  * [1,2,3]->[[1,2],[1,3],[2,3]]
  */
 public fun <Some> combinations(
-    thingsToAssociate: List<Some>,
-    limitSizeOfAssociation: Int = thingsToAssociate.size - 1
+        thingsToAssociate: List<Some>,
+        limitSizeOfAssociation: Int = thingsToAssociate.size - 1
 ): List<Set<Some>> {
 
     if (limitSizeOfAssociation == 1) {
@@ -59,7 +59,7 @@ class OnePossibiliteSet<T>(
 }
 
 
-class RemoveSureValueFromTheRestOfTheGroup<T,GroupT:Iterable<SCasePossible<T>>> : BasicRule<GroupT>() {
+class RemoveSureValueFromTheRestOfTheGroup<T, GroupT : Iterable<SCasePossible<T>>> : BasicRule<GroupT>() {
 
     override fun evaluate(facts: GroupT): Boolean = true
 
@@ -84,53 +84,54 @@ class RemoveSureValueFromTheRestOfTheGroup<T,GroupT:Iterable<SCasePossible<T>>> 
  * lockByPossibleFamine remove possibles of otherCase when the value of the lockCombination are the only one who can be taken by some case
  *  * ex: [[1,2,3,4],[1,2],[1,2]] ->[[3,4],[1,2],[1,2]]
  */
-class RemovePossibleLockFromTheGroup<T,GroupT:Iterable<SCasePossible<T>>>(var maxSizeLock:Int=0,val lockByCaseFamine:Boolean=true,val lockByPossibleFamine:Boolean=true) : BasicRule<GroupT>() {
+class RemovePossibleLockFromTheGroup<T, GroupT : Iterable<SCasePossible<T>>>(var maxSizeLock: Int = 0, val lockByCaseFamine: Boolean = true, val lockByPossibleFamine: Boolean = true) : BasicRule<GroupT>() {
 
-    override fun evaluate(facts: GroupT): Boolean = facts.count { it.getValue()==null }>2
+    override fun evaluate(facts: GroupT): Boolean = facts.count { it.getValue() == null } > 2
 
     override fun execute(group: GroupT) {
-        if(maxSizeLock==0)
-            maxSizeLock=group.count()-2
+        if (maxSizeLock == 0)
+            maxSizeLock = group.count() - 2
 
         val unresolvedsCases = group.filter { it.getValue() == null }
-            .sortedBy { it.getPossibles().size }
+                .sortedBy { it.getPossibles().size }
 
-        val unresolvedValues= group.filter { it.getValue() == null }.flatMap { it.getPossibles()}.distinct()
+        val unresolvedValues = group.filter { it.getValue() == null }.flatMap { it.getPossibles() }.distinct()
 
 
-        for(combSize in 2..maxSizeLock) {
-            val combinations = combinations(unresolvedValues,combSize);
+        for (combSize in 2..maxSizeLock) {
+            val combinations = combinations(unresolvedValues, combSize);
 
             for (combination in combinations) {
 
-                if(lockByPossibleFamine) {
+                if (lockByPossibleFamine) {
                     //Case 1 : if the combinaison if the only possible for a few-cases, then remove-it from the possible of other cases
                     val casesWithOnlyPossibleOnCombination =
-                        unresolvedsCases.filter { combination.containsAll(it.getPossibles()) };
-                    if (casesWithOnlyPossibleOnCombination.size == combSize && unresolvedsCases.size>combSize) {
+                            unresolvedsCases.filter { combination.containsAll(it.getPossibles()) };
+                    if (casesWithOnlyPossibleOnCombination.size == combSize && unresolvedsCases.size > combSize) {
                         val otherCases = unresolvedsCases.minus(casesWithOnlyPossibleOnCombination)
                         otherCases.forEach { it.removePossibilites(combination) }
 
                     }
                 }
-              if( lockByCaseFamine){ //TODO : don't work, provoque invalide grid
-                  //case 2 If only a few case can take the possible value of this combination, then remove the possible Not In Combination
+                if (lockByCaseFamine) { //TODO : don't work, provoque invalide grid
+                    //case 2 If only a few case can take the possible value of this combination, then remove the possible Not In Combination
 
-                  val casesWhoCanTakeCombination =
-                      unresolvedsCases.filter { it.getPossibles().intersect(combination).size > 0 };
-                  if (casesWhoCanTakeCombination.size == combSize && unresolvedsCases.size > combSize) {
-                      casesWhoCanTakeCombination.filter {  it.getPossibles().intersect(combination).size != min(
-                          it.getPossibles().size,
-                          combSize
-                      )
-                      }.forEach {
-                          it.removePossibilites(it.getPossibles().filter { p ->
-                            !combination.contains(
-                                p
+                    val casesWhoCanTakeCombination =
+                            unresolvedsCases.filter { it.getPossibles().intersect(combination).size > 0 };
+                    if (casesWhoCanTakeCombination.size == combSize && unresolvedsCases.size > combSize) {
+                        casesWhoCanTakeCombination.filter {
+                            it.getPossibles().intersect(combination).size != min(
+                                    it.getPossibles().size,
+                                    combSize
                             )
-                        })
+                        }.forEach {
+                            it.removePossibilites(it.getPossibles().filter { p ->
+                                !combination.contains(
+                                        p
+                                )
+                            })
+                        }
                     }
-                }
                 }
 
 
@@ -139,23 +140,24 @@ class RemovePossibleLockFromTheGroup<T,GroupT:Iterable<SCasePossible<T>>>(var ma
     }
 }
 
-class RemovePossibleLockFromTheGroupOld<T,GroupT:Iterable<SCasePossible<T>>> : BasicRule<GroupT>() {
+class RemovePossibleLockFromTheGroupOld<T, GroupT : Iterable<SCasePossible<T>>> : BasicRule<GroupT>() {
 
     override fun evaluate(facts: GroupT): Boolean = true
 
     override fun execute(group: GroupT) {
 
         val unresolveds = group.filter { it.getValue() == null }.filter { it.getPossibles().size > 1 }
-            .sortedBy { it.getPossibles().size }
+                .sortedBy { it.getPossibles().size }
 
         unresolveds.forEach { oneCase ->
             val caseWithSamePossibles = unresolveds
-                .filter { otherCase -> //one case contain all the possible of another.
-                    otherCase.getPossibles().intersect(oneCase.getPossibles()).size == min(
-                        oneCase.getPossibles().size,
-                        otherCase.getPossibles().size
-                    ) && otherCase.getPossibles().size <= oneCase.getPossibles().size
-                }
+                    .filter { otherCase ->
+                        //one case contain all the possible of another.
+                        otherCase.getPossibles().intersect(oneCase.getPossibles()).size == min(
+                                oneCase.getPossibles().size,
+                                otherCase.getPossibles().size
+                        ) && otherCase.getPossibles().size <= oneCase.getPossibles().size
+                    }
             if (caseWithSamePossibles.size > 1 && caseWithSamePossibles.size == oneCase.getPossibles().size) {//We are in a lock case: only this samePossibles should have this possibles , the other should'nt
 
                 unresolveds.filterNot { ot -> caseWithSamePossibles.contains(ot) }.forEach { otherCase ->
@@ -169,12 +171,12 @@ class RemovePossibleLockFromTheGroupOld<T,GroupT:Iterable<SCasePossible<T>>> : B
     }
 }
 
-class FillRandomlyOneCase<Type,GroupType: Iterable<SCasePossible<Type>>, GridType : Grid<Type, SCasePossible<Type>,GroupType>>(
-    val isGridPossibleValid:((GridType)->Boolean),
-    val resolverExecute:((GridType)->Unit)
+class FillRandomlyOneCase<Type, GroupType : Iterable<SCasePossible<Type>>, GridType : Grid<Type, SCasePossible<Type>, GroupType>>(
+        val isGridPossibleValid: ((GridType) -> Boolean),
+        val resolverExecute: ((GridType) -> Unit)
 
 
-): BasicRule<GridType>() {
+) : BasicRule<GridType>() {
 
     override fun evaluate(grid: GridType): Boolean = true
 
@@ -187,10 +189,10 @@ class FillRandomlyOneCase<Type,GroupType: Iterable<SCasePossible<Type>>, GridTyp
     }
 }
 
-class UseRandomValueAsSure<Type,GroupType: Iterable<SCasePossible<Type>>, GridType : Grid<Type, SCasePossible<Type>,GroupType>>
+class UseRandomValueAsSure<Type, GroupType : Iterable<SCasePossible<Type>>, GridType : Grid<Type, SCasePossible<Type>, GroupType>>
 
 
-: BasicRule<GridType>() {
+    : BasicRule<GridType>() {
     override fun evaluate(grid: GridType): Boolean {
 
 
@@ -208,24 +210,22 @@ class UseRandomValueAsSure<Type,GroupType: Iterable<SCasePossible<Type>>, GridTy
 
         //  println("resolveWithHypothesis")
         // println(grid)
-      val firstCaseToResolve =
-            grid.first { it.getValue() == null }
+        val firstCaseToResolve =
+                grid.first { it.getValue() == null }
 
         firstCaseToResolve.setValue(firstCaseToResolve.getPossibles().random())
 
     }
 
-    }
+}
 
 
+class UseRandomHypothesis<Type, GroupType : Iterable<SCasePossible<Type>>, GridType : Grid<Type, SCasePossible<Type>, GroupType>>(
+        val isGridPossibleValid: ((GridType) -> Boolean),
+        val resolverExecut: ((GridType) -> Unit)
 
 
-class UseRandomHypothesis<Type,GroupType: Iterable<SCasePossible<Type>>, GridType : Grid<Type, SCasePossible<Type>,GroupType>>(
-    val isGridPossibleValid:((GridType)->Boolean),
-    val resolverExecut:((GridType)->Unit)
-
-
-): BasicRule<GridType>() {
+) : BasicRule<GridType>() {
 
     override fun evaluate(grid: GridType): Boolean {
 
@@ -233,7 +233,7 @@ class UseRandomHypothesis<Type,GroupType: Iterable<SCasePossible<Type>>, GridTyp
         val gridStillHaveEmptySlot = grid.nbOfFreePossibilite() > grid.size()
 
         if (gridPossibleValid && gridStillHaveEmptySlot) {
-           return true
+            return true
 
         }
         return false
@@ -244,7 +244,7 @@ class UseRandomHypothesis<Type,GroupType: Iterable<SCasePossible<Type>>, GridTyp
 
         //  println("resolveWithHypothesis")
         // println(grid)
-        val sortedCaseWithLowPossible = grid.filter { it.getValue() == null }.filter {it.getPossibles().size>1}.sortedBy { it.getPossibles().size }
+        val sortedCaseWithLowPossible = grid.filter { it.getValue() == null }.filter { it.getPossibles().size > 1 }.sortedBy { it.getPossibles().size }
 
         var oldNbPossible = grid.sumBy { it.getPossibles().size }
         for (caseWithLowPossible in sortedCaseWithLowPossible) {
@@ -253,7 +253,7 @@ class UseRandomHypothesis<Type,GroupType: Iterable<SCasePossible<Type>>, GridTyp
             for (hypothesis in caseWithLowPossible.getPossibles().toList()) {
                 val x = caseWithLowPossible.x
                 val y = caseWithLowPossible.y
-                val newGrid:GridType = tryHypothesis(grid, x, y, hypothesis)
+                val newGrid: GridType = tryHypothesis(grid, x, y, hypothesis)
                 var newNbPossible = grid.sumBy { it.getPossibles().size }
                 if (!isGridPossibleValid(newGrid)) {
                     // println("hypothesis fail  $x $y $hypothesis")
@@ -266,7 +266,7 @@ class UseRandomHypothesis<Type,GroupType: Iterable<SCasePossible<Type>>, GridTyp
                 } else {
 
                     if (newNbPossible == grid.size()) {
-                        grid.fillGrid(newGrid )
+                        grid.fillGrid(newGrid)
 
                     }
                 }
@@ -276,12 +276,12 @@ class UseRandomHypothesis<Type,GroupType: Iterable<SCasePossible<Type>>, GridTyp
 
 
     private fun tryHypothesis(
-        grid: GridType,
-        x: Int, y: Int,
-        hypothesis: Type
+            grid: GridType,
+            x: Int, y: Int,
+            hypothesis: Type
     ): GridType {
 
-        val newGrid:GridType = grid.clone() as GridType
+        val newGrid: GridType = grid.clone() as GridType
         newGrid.get(x, y).setValue(hypothesis)
 
         this.resolverExecut(newGrid)
@@ -292,7 +292,6 @@ class UseRandomHypothesis<Type,GroupType: Iterable<SCasePossible<Type>>, GridTyp
 }
 
 
-
 fun <T> runBook(fact: T, rules: Rules<T>) {
     DefaultRulesEngine<T>().fire(rules, fact)
 }
@@ -301,13 +300,13 @@ fun <T> runBook(fact: T, rules: Rules<T>) {
 abstract class ResolveGrid<Type,
         GroupType : Iterable<SCasePossible<Type>>,
         GridType : Grid<Type, SCasePossible<Type>, GroupType>>() :
-    BasicRule<GridType>() {
+        BasicRule<GridType>() {
 
     abstract var caseRules: Rules<SCasePossible<Type>>
     abstract var groupeRules: Rules<out GroupType>
     abstract var gridRules: Rules<out GridType>
     override fun evaluate(grid: GridType): Boolean =
-        isNotResolved(grid)
+            isNotResolved(grid)
 
     open protected fun isNotResolved(grid: GridType) = grid.any { it.getValue() == null }
 
@@ -316,17 +315,17 @@ abstract class ResolveGrid<Type,
         try {
             var nbPossible = grid.possibles.size * grid.possibles.size * grid.possibles.size + 1
             var newNbPossible = nbPossible - 1
-            do{
+            do {
                 grid.forEach {
                     runBook(it, caseRules)
                 }
 
-                grid.groups.forEach {group ->
+                grid.groups.forEach { group ->
                     runBook(
-                        group,
-                        groupeRules as Rules<GroupType>
+                            group,
+                            groupeRules as Rules<GroupType>
                     )
-                    if(!isGridPossibleValid(grid))
+                    if (!isGridPossibleValid(grid))
                         println("ERROR, grid No More valid")
                 }
                 nbPossible = newNbPossible
@@ -339,8 +338,8 @@ abstract class ResolveGrid<Type,
 
                 if (gridPossibleValid && traditionalResolutionDontBringAnything && gridStillHaveEmptySlot) {
                     runBook(
-                        grid,
-                        gridRules as Rules<GridType>
+                            grid,
+                            gridRules as Rules<GridType>
                     )
                     newNbPossible = grid.sumBy { it.getPossibles().size }
                 }
@@ -352,24 +351,25 @@ abstract class ResolveGrid<Type,
         }
     }
 
-    abstract fun isGridPossibleValid(grid: GridType): Boolean ;
+    abstract fun isGridPossibleValid(grid: GridType): Boolean;
 
 
     fun run(grid: GridType) {
         runBook(grid, Rules(setOf(this)))
     }
 
-    fun addCaseRule( rule: Rule<SCasePossible<Type>>){
-     this.caseRules=Rules(this.caseRules.toSet()+rule)
+    fun addCaseRule(rule: Rule<SCasePossible<Type>>) {
+        this.caseRules = Rules(this.caseRules.toSet() + rule)
     }
 
     fun addGroupeRule(rule: Rule<out GroupType>) {
         val rules = this.groupeRules.toSet() + rule
         this.groupeRules = Rules(rules as Set<Rule<Nothing>>)
     }
+
     fun addGridRule(rule: Rule<out GridType>) {
         val rules = this.gridRules.toSet() + rule
-        this.gridRules = Rules(rules as Set<Rule<Nothing>> )
+        this.gridRules = Rules(rules as Set<Rule<Nothing>>)
     }
 
     fun addAllRules(otherResolver: ResolveGrid<Type, GroupType, GridType>) {
@@ -379,10 +379,11 @@ abstract class ResolveGrid<Type,
         for (rule in otherResolver.groupeRules.toSet()) {
             addGroupeRule(rule)
         }
-        for (rule in otherResolver.gridRules.toSet()){
+        for (rule in otherResolver.gridRules.toSet()) {
             addGridRule(rule)
         }
     }
+
     abstract fun errorInTheGrid(grid: GridType): List<Any>
 }
 

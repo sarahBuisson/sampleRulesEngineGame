@@ -25,7 +25,7 @@ class SudokuGridResolveTest {
                 "800203009\n" +
                 "005010300"
 
-        val grid = SudokuGrid(3, 3, initPossibleValues(3*3));
+        val grid = SudokuGrid(3, 3, initPossibleValues(3 * 3));
 
         grid.fill(content)
         println(grid)
@@ -73,12 +73,12 @@ class SudokuGridResolveTest {
     @Test
     fun shouldResolveVariousLevel() {
         val grids = listOf(tresfacile, facile, moyen, difficile, tresdifficile, expert)
-            .map { it.replace(" ", "\n").replace("x", "0") }
+                .map { it.replace(" ", "\n").replace("x", "0") }
 
 
 
         for (content in grids) {
-            val grid = SudokuGrid(3, 3, initPossibleValues(3*3));
+            val grid = SudokuGrid(3, 3, initPossibleValues(3 * 3));
 
             grid.fill(content)
             println(grid)
@@ -87,7 +87,7 @@ class SudokuGridResolveTest {
             println("level ---")
 
 
-                runBook(grid, Rules(setOf(ResolveSudokuGridDifficult<Int>())))
+            runBook(grid, Rules(setOf(ResolveSudokuGridDifficult<Int>())))
 
             println(grid)
             assertEquals(grid.nbOfFreePossibilite(), grid.size())
@@ -97,24 +97,22 @@ class SudokuGridResolveTest {
     @Test
     fun shouldResolveDifficileLevel() {
         val grids = listOf(tresfacile, facile, moyen, difficile, tresdifficile, expert)
-            .map { it.replace(" ", "\n").replace("x", "0") }
+                .map { it.replace(" ", "\n").replace("x", "0") }
 
 
+        val grid = SudokuGrid(3, 3, initPossibleValues(3 * 3));
+
+        grid.fill(difficile)
+        println(grid)
+
+        println(grid.columns.first().first().getPossibles())
+        println("level ---")
 
 
-            val grid = SudokuGrid(3, 3, initPossibleValues(3*3));
+        runBook(grid, Rules(setOf(ResolveSudokuGridDifficult<Int>())))
 
-            grid.fill(difficile)
-            println(grid)
-
-            println(grid.columns.first().first().getPossibles())
-            println("level ---")
-
-
-                runBook(grid, Rules(setOf(ResolveSudokuGridDifficult<Int>())))
-
-            println(grid)
-            assertEquals(grid.nbOfFreePossibilite(), grid.size())
+        println(grid)
+        assertEquals(grid.nbOfFreePossibilite(), grid.size())
 
     }
 
@@ -122,9 +120,7 @@ class SudokuGridResolveTest {
     fun shouldResolve33_facile() {
 
 
-
-
-        val grid = SudokuGrid(3, 3, initPossibleValues(3*3));
+        val grid = SudokuGrid(3, 3, initPossibleValues(3 * 3));
 
         grid.fill(facile)
         println(grid)
@@ -146,7 +142,6 @@ class SudokuGridResolveTest {
         println(grid.columns[1].first())
         assertEquals(grid.nbOfFreePossibilite(), grid.size())
     }
-
 
 
 }

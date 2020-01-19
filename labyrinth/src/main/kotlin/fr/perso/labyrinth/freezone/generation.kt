@@ -11,7 +11,7 @@ import objetDiversDefault
 var index = 0;
 
 
-interface FreeZone:NamedZone, ConnectedZone, GeoZone {
+interface FreeZone : NamedZone, ConnectedZone, GeoZone {
     override val name: String
     override var connected: MutableList<FreeZone>
     override var content: MutableList<ObjectZone>
@@ -19,12 +19,12 @@ interface FreeZone:NamedZone, ConnectedZone, GeoZone {
 
 
 data class FreeZoneImpl(
-    override val name: String = "" + (index++),
-    override var connected: MutableList<FreeZone> = mutableListOf<FreeZone>(),
-    override var content: MutableList<ObjectZone> = mutableListOf<ObjectZone>()
+        override val name: String = "" + (index++),
+        override var connected: MutableList<FreeZone> = mutableListOf<FreeZone>(),
+        override var content: MutableList<ObjectZone> = mutableListOf<ObjectZone>()
 
 
-):FreeZone {
+) : FreeZone {
 
     override fun toString(): String {
         return name + "(" + connected.map { it.name } + ")" + content.map { it.name } + ""
@@ -52,9 +52,9 @@ open class ObjectZone(open var name: String) {
 class DoorObjectZone(val destination: ConnectedZone, var key: ObjectZone? = null) : ObjectZone("door")
 class KeyObjectZone(override var name: String) : ObjectZone(name)
 class ExchangeObjectZone(
-    var want: ObjectZone,
-    var give: ObjectZone,
-    override var name: String = " exchange donne ${give.name} contre ${want.name}"
+        var want: ObjectZone,
+        var give: ObjectZone,
+        override var name: String = " exchange donne ${give.name} contre ${want.name}"
 ) : ObjectZone(name)
 
 
@@ -82,7 +82,7 @@ fun createLab(size: Int): List<FreeZone> {
 
     lab.toList().forEach { it ->
         if (it.connected.size < 4 &&
-            (1..10).random() > 8
+                (1..10).random() > 8
         ) {
             val culDeSac = createCorridor(size)
             linkZone(culDeSac.first(), it)
@@ -94,8 +94,8 @@ fun createLab(size: Int): List<FreeZone> {
 
 
 fun distanceToZone(
-    origin: ConnectedZone,
-    count: MutableMap<ConnectedZone, Int> = mutableMapOf<ConnectedZone, Int>(Pair(origin, 0))
+        origin: ConnectedZone,
+        count: MutableMap<ConnectedZone, Int> = mutableMapOf<ConnectedZone, Int>(Pair(origin, 0))
 ): MutableMap<ConnectedZone, Int> {
     if (count[origin] == null) {
         val min: Int = origin.connected.map { count[it] }.filterNotNull().min() ?: 0
@@ -111,10 +111,10 @@ fun distanceToZone(
 
 
 class LabFillerExit<T>(
-    keyToDoorArray: Array<Array<String>> = doorWithKeyDefault,
-    objetDiversArray: Array<String> = objetDiversDefault
+        keyToDoorArray: Array<Array<String>> = doorWithKeyDefault,
+        objetDiversArray: Array<String> = objetDiversDefault
 ) :
-    LabFiller<T>(keyToDoorArray, objetDiversArray)
+        LabFiller<T>(keyToDoorArray, objetDiversArray)
         where T : GeoZone, T : ConnectedZone {
 
     fun isCulDeSac(freeZone: ConnectedZone): Boolean {
@@ -124,7 +124,7 @@ class LabFillerExit<T>(
     }
 
     override public fun fillLab(
-        zones: List<T>, start:T, numberOfDoor: Int, numberOfExchanges: Int
+            zones: List<T>, start: T, numberOfDoor: Int, numberOfExchanges: Int
     ) {
         val culDeSacs = zones.filter { isCulDeSac(it) }.sortedByDescending { distanceMap[it] };
         val exit = culDeSacs.first()
@@ -154,15 +154,15 @@ class LabFillerExit<T>(
 open class LabFiller<T>
         where T : GeoZone, T : ConnectedZone {
 
-   lateinit var distanceMap: Map<ConnectedZone, Int>
+    lateinit var distanceMap: Map<ConnectedZone, Int>
     lateinit var begin: T
     var keyToDoor: MutableList<Pair<String, String>>;
     var objetDivers: MutableList<String>;
     var listOfKey: MutableList<String>;
 
     constructor(
-        keyToDoorArray: Array<Array<String>> = doorWithKeyDefault,
-        objetDiversArray: Array<String> = objetDiversDefault
+            keyToDoorArray: Array<Array<String>> = doorWithKeyDefault,
+            objetDiversArray: Array<String> = objetDiversDefault
     ) {
         keyToDoor = keyToDoorArray.map { Pair(it[0], it[1]) }.toMutableList()
         objetDivers = objetDiversArray.toMutableList()
@@ -171,7 +171,7 @@ open class LabFiller<T>
 
 
     open public fun fillLab(
-        zones: List<T>,  begin:T = zones.first(), numberOfDoor: Int, numberOfExchanges: Int
+            zones: List<T>, begin: T = zones.first(), numberOfDoor: Int, numberOfExchanges: Int
     ) {
 
         distanceMap = distanceToZone(begin);
@@ -203,10 +203,10 @@ open class LabFiller<T>
             val distanceMax = distanceMap[doorZone]!!;
             zoneWhoWillBeClosedByDoorAndKey = zonesAfterDoorZone.random()
             val door =
-                doorZone.content.find { it is DoorObjectZone && it.destination == zoneWhoWillBeClosedByDoorAndKey } as DoorObjectZone
+                    doorZone.content.find { it is DoorObjectZone && it.destination == zoneWhoWillBeClosedByDoorAndKey } as DoorObjectZone
 
             affectKeyToDoor(
-                door, doorZone
+                    door, doorZone
 
             )
         }
@@ -234,9 +234,9 @@ open class LabFiller<T>
     }
 
 
-    protected  fun affectKeyToDoor(
-        door: DoorObjectZone,
-        doorZone: T
+    protected fun affectKeyToDoor(
+            door: DoorObjectZone,
+            doorZone: T
     ) {
         val distanceMax = distanceMap[doorZone]!!
         val availableZoneForKey = distanceMap.filterValues { it <= distanceMax }.keys
@@ -250,8 +250,8 @@ open class LabFiller<T>
     }
 
     protected fun affectKeyToDoor(
-        door: DoorObjectZone,
-        key: KeyObjectZone
+            door: DoorObjectZone,
+            key: KeyObjectZone
     ) {
 
         door.key = key

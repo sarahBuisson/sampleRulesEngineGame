@@ -8,9 +8,14 @@ allprojects {
     version = '1.0-SNAPSHOT'
 }
 
+subprojects {
+
+    apply from: "https://raw.githubusercontent.com/sarahBuisson/kotlin-multiplatform-multiproject-sample/master/util.gradle.kts"
+
+}
 buildscript {
     ext {
-        kotlin_version = '1.3.40'
+        kotlin_version = '1.3.60'
         kotlin_logging_version = "1.6.22"
         coroutines_version = "0.23.3"
     }

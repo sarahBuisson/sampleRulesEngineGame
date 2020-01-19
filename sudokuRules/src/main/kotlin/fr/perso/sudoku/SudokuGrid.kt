@@ -11,9 +11,9 @@ class SudokuGrid<Type> : Grid<Type, SCasePossible<Type>, Iterable<SCasePossible<
     lateinit var squares: List<List<SCasePossible<Type>>>
 
     constructor(
-        width: Int,
-        height: Int = width,
-        possibles: List<Type>
+            width: Int,
+            height: Int = width,
+            possibles: List<Type>
     ) : super(width, height, possibles) {
 
         val size = height * width - 1

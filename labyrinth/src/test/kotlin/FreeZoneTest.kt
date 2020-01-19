@@ -22,7 +22,7 @@ class FreeZoneTest {
     fun shouldFillLabyrinth() {
         val lab = createLab(10);
         println(lab)
-        LabFiller<FreeZone>().fillLab(lab, lab.first(),10,1);
+        LabFiller<FreeZone>().fillLab(lab, lab.first(), 10, 1);
         println(lab)
     }
 
@@ -31,7 +31,7 @@ class FreeZoneTest {
         for (i in 0..100) {
             val lab = createCorridor(10);
 
-            LabFiller<FreeZone>().fillLab(lab,  lab.first(),2,0);
+            LabFiller<FreeZone>().fillLab(lab, lab.first(), 2, 0);
             println(lab)
         }
 
@@ -42,23 +42,22 @@ class FreeZoneTest {
 
         val lab = createCorridor(100);
 
-        LabFiller<FreeZone>().fillLab(lab, lab.first(), 10,0);
+        LabFiller<FreeZone>().fillLab(lab, lab.first(), 10, 0);
         println(lab)
 
 
     }
 
 
-
     @Test
     fun shouldPlay() {
         val partie = initPartie()
-        println(partie.level.map { it.toString()+"\n" })
+        println(partie.level.map { it.toString() + "\n" })
         println("---")
         for (i in 0..100) {
-            println(""+i+" "+partie.player)
-            if(!partie.player.inventory.isEmpty())
-            partie.player.selected=partie.player.inventory.random()
+            println("" + i + " " + partie.player)
+            if (!partie.player.inventory.isEmpty())
+                partie.player.selected = partie.player.inventory.random()
             playerInteractWith(partie, partie.player.location.content.random())
 
         }
@@ -66,7 +65,7 @@ class FreeZoneTest {
         println(partie.level)
 
         println("---")
-        println(partie.player.inventory.map{it.name})
+        println(partie.player.inventory.map { it.name })
     }
 
 

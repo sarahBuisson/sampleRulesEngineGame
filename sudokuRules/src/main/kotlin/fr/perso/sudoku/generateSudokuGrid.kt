@@ -6,7 +6,7 @@ import fr.perso.sudoku.ResolveSudokuGridMedium
 import fr.perso.sudoku.SudokuGrid
 import fr.perso.sudoku.resolveGrid
 
-fun <Type> generateFullSudoku(grid: SudokuGrid<Type>,   resolver:ResolveSudokuGrid<Type> = ResolveSudokuGridMedium()): SudokuGrid<Type> {
+fun <Type> generateFullSudoku(grid: SudokuGrid<Type>, resolver: ResolveSudokuGrid<Type> = ResolveSudokuGridMedium()): SudokuGrid<Type> {
     val newL = ArrayList(grid.possibles).shuffled()
 
     for (i in 0..grid.possibles.size - 1) {
@@ -21,17 +21,17 @@ fun <Type> generateFullSudoku(grid: SudokuGrid<Type>,   resolver:ResolveSudokuGr
     generator.run(grid)
     println(grid.toStringPossi())
     println(grid)
-    grid.forEach { it.solution=it.getValue() }
+    grid.forEach { it.solution = it.getValue() }
 
     return resolveGrid(grid)
 }
 
 
 class GenerationSudokuGridFull<Type> :
-    ResolveSudokuGrid<Type> {
+        ResolveSudokuGrid<Type> {
 
 
-    constructor( ) {
+    constructor() {
         addGroupeRule(RemovePossibleLockFromTheGroup(3))
         addGridRule(FillRandomlyOneCase(this::isGridPossibleValid, this::execute))
     }
@@ -64,9 +64,9 @@ class ResolvePartialSudokyGrid<Type>() : ResolveSudokuGrid<Type>() {
 
     fun isCaseResolved(grid: SudokuGrid<Type>) = grid.get(x, y).getValue() != null
 
-    fun run(grid:SudokuGrid<Type>,x:Int,y:Int){
-        this.x=x
-        this.y=y
+    fun run(grid: SudokuGrid<Type>, x: Int, y: Int) {
+        this.x = x
+        this.y = y
         super.run(grid)
 
     }
@@ -78,8 +78,8 @@ class ResolvePartialSudokyGrid<Type>() : ResolveSudokuGrid<Type>() {
  */
 fun <Type> generateCleanedSudoku(grid: SudokuGrid<Type>,
                                  numberOfRemanningCase: Int,
-                                  resolver: ResolveSudokuGrid<Type> = ResolveSudokuGridMedium<Type>()
-                                ): SudokuGrid<Type> {
+                                 resolver: ResolveSudokuGrid<Type> = ResolveSudokuGridMedium<Type>()
+): SudokuGrid<Type> {
     val caseResolveRule: ResolvePartialSudokyGrid<Type> = ResolvePartialSudokyGrid<Type>()
     caseResolveRule.addAllRules(resolver);
     var gridToUpdate = grid.clone();
@@ -87,7 +87,7 @@ fun <Type> generateCleanedSudoku(grid: SudokuGrid<Type>,
     do {
 
         val filter = grid.filter { it.getValue() != null }
-            .filter { !casesWithValueNeededForResolution.contains(it) }
+                .filter { !casesWithValueNeededForResolution.contains(it) }
 
         val caseCleanable = filter.random()
 
@@ -96,23 +96,23 @@ fun <Type> generateCleanedSudoku(grid: SudokuGrid<Type>,
             modifiedGrid.get(caseCleanable.x, caseCleanable.y).resetCase(grid.possibles)
             modifiedGrid.resetPossibles()
 
-            caseResolveRule.run(modifiedGrid,  caseCleanable.x,
-                caseCleanable.y)
+            caseResolveRule.run(modifiedGrid, caseCleanable.x,
+                    caseCleanable.y)
             if (caseResolveRule.isCaseResolved(modifiedGrid) && modifiedGrid.get(
-                    caseCleanable.x,
-                    caseCleanable.y
-                ).getValue() != caseCleanable.getValue()
+                            caseCleanable.x,
+                            caseCleanable.y
+                    ).getValue() != caseCleanable.getValue()
             ) {
                 caseResolveRule.isCaseResolved(modifiedGrid);
                 println("ERROR, have found anotherValue")
             } else
                 if (caseResolveRule.isCaseResolved(modifiedGrid)) {
-                   // println("resolved")
+                    // println("resolved")
                     // println(modifiedGrid)
                     gridToUpdate.get(caseCleanable.x, caseCleanable.y).resetCase(grid.possibles)
 
                 } else {
-                    println("add to needed "+casesWithValueNeededForResolution.size)
+                    println("add to needed " + casesWithValueNeededForResolution.size)
                     casesWithValueNeededForResolution.add(caseCleanable);
                 }
         } else {
@@ -122,7 +122,7 @@ fun <Type> generateCleanedSudoku(grid: SudokuGrid<Type>,
         val difficultyNotReached = numberOfCaseWithStillAValue >= numberOfRemanningCase
         val allRemaningCaseAreNeeded = numberOfCaseWithStillAValue <= casesWithValueNeededForResolution.size
 
-        if(allRemaningCaseAreNeeded){
+        if (allRemaningCaseAreNeeded) {
             println("allRemaningCaseAreNeeded")
         }
 

@@ -9,7 +9,7 @@ import org.jeasy.rules.api.Rules
 open class ResolveSudokuGridEasy<Type> : ResolveSudokuGrid<Type> {
 
     constructor() {
-       // this.addGroupeRule(   RemovePossibleLockFromTheGroup<Type, Iterable<SCasePossible<Type>>>(2))
+        // this.addGroupeRule(   RemovePossibleLockFromTheGroup<Type, Iterable<SCasePossible<Type>>>(2))
     }
 
 }
@@ -18,7 +18,7 @@ open class ResolveSudokuGridEasy<Type> : ResolveSudokuGrid<Type> {
 open class ResolveSudokuGridMedium<Type> : ResolveSudokuGrid<Type> {
 
     constructor() {
-        this.addGroupeRule( RemovePossibleLockFromTheGroup<Type, Iterable<SCasePossible<Type>>>(4))
+        this.addGroupeRule(RemovePossibleLockFromTheGroup<Type, Iterable<SCasePossible<Type>>>(4))
     }
 
 }
@@ -27,23 +27,23 @@ open class ResolveSudokuGridDifficult<Type> : ResolveSudokuGrid<Type> {
 
     constructor() {
         val hypothesisRule: Rule<SudokuGrid<Type>> = UseRandomHypothesis(
-            this::isGridPossibleValid,
-            this::execute
+                this::isGridPossibleValid,
+                this::execute
         )
         this.addGridRule(hypothesisRule)
-        this.addGroupeRule(   RemovePossibleLockFromTheGroup<Type, Iterable<SCasePossible<Type>>>())
+        this.addGroupeRule(RemovePossibleLockFromTheGroup<Type, Iterable<SCasePossible<Type>>>())
     }
 
 }
 
 
 open class ResolveSudokuGrid<Type>() :
-    ResolveGrid<Type, Iterable<SCasePossible<Type>>, SudokuGrid<Type>>() {
-     override var caseRules = Rules(setOf(OnePossibiliteSet<Type>()))
+        ResolveGrid<Type, Iterable<SCasePossible<Type>>, SudokuGrid<Type>>() {
+    override var caseRules = Rules(setOf(OnePossibiliteSet<Type>()))
     override var groupeRules: Rules<out Iterable<SCasePossible<Type>>> = Rules(
-        setOf(
-            RemoveSureValueFromTheRestOfTheGroup<Type, Iterable<SCasePossible<Type>>>()
-        )
+            setOf(
+                    RemoveSureValueFromTheRestOfTheGroup<Type, Iterable<SCasePossible<Type>>>()
+            )
     )
     override var gridRules: Rules<out SudokuGrid<Type>> = Rules<SudokuGrid<Type>>()
 

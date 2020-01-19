@@ -1,4 +1,5 @@
 package fr.perso.skyscraper
+
 import fr.perso.initPossibleValues
 import fr.perso.rules.runBook
 import org.jeasy.rules.api.Rules

@@ -7,9 +7,9 @@ open class SCase<TPossible> {
     private var value: TPossible? = null
 
     constructor(
-        x: Int,
-        y: Int,
-        value: TPossible? = null
+            x: Int,
+            y: Int,
+            value: TPossible? = null
     ) {
         this.x = x;
         this.y = y;
@@ -28,21 +28,21 @@ open class SCase<TPossible> {
 
 
 class SCasePossible<TPossible> :
-    SCase<TPossible> {
+        SCase<TPossible> {
     private var possibles: MutableList<TPossible>
     var solution: TPossible? = null
 
     constructor(
-        x: Int,
-        y: Int,
-        value: TPossible? = null,
-        possibles: List<TPossible> = mutableListOf<TPossible>()
+            x: Int,
+            y: Int,
+            value: TPossible? = null,
+            possibles: List<TPossible> = mutableListOf<TPossible>()
 
     ) : super(x, y, value) {
         this.possibles = possibles.toMutableList()
     }
 
-    fun getPossibles():List<TPossible> = possibles;
+    fun getPossibles(): List<TPossible> = possibles;
 
     fun removePossibilite(possible: TPossible) {
         this.possibles.remove(possible)
@@ -54,7 +54,7 @@ class SCasePossible<TPossible> :
     override fun setValue(value: TPossible?) {
         super.setValue(value)
         this.possibles = mutableListOf(value!!)
-        if (value != solution && solution!=null) {
+        if (value != solution && solution != null) {
             println("ERROR")
         }
     }
@@ -189,14 +189,14 @@ abstract class Grid<Type, TCase : SCasePossible<Type>, TGroupe : Iterable<SCaseP
 
         this.forEach {
             val otherCase = otherGrid.get(it.x, it.y)
-           it.fill(otherCase)
+            it.fill(otherCase)
         }
     }
 
     open fun fill(
-        content: String,
-        separators: List<Char> = listOf(' ', '\n', '\r'),
-        nullPossi: List<Char> = listOf('x', '0')
+            content: String,
+            separators: List<Char> = listOf(' ', '\n', '\r'),
+            nullPossi: List<Char> = listOf('x', '0')
     ): CharIterator {
         val contentTrim = content.replace("\n", "").replace("\r", "").replace(" ", "")
 
@@ -206,10 +206,10 @@ abstract class Grid<Type, TCase : SCasePossible<Type>, TGroupe : Iterable<SCaseP
         for (y in 0..size) {
             for (x in 0..size) {
                 val next = iter.next();
-                if (!nullPossi.contains(next))
-                {
+                if (!nullPossi.contains(next)) {
                     get(x, y).solution = (toType("" + next))
-                    get(x, y).setValue(toType("" + next))}
+                    get(x, y).setValue(toType("" + next))
+                }
 
 
             }

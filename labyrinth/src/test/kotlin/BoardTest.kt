@@ -12,25 +12,25 @@ class BoardTest {
 
         val factory = { x: Int, y: Int, b: Board<ZoneOfCoridor> ->
             ZoneOfCoridor(
-                x,
-                y
+                    x,
+                    y
             )
         }
         val b = Board<ZoneOfCoridor>(
-            10, 10, factory
+                10, 10, factory
         )
 
         val partie =
-            Partie(Cursor(PointImpl(3, 3)), b)
+                Partie(Cursor(PointImpl(3, 3)), b)
         runBook(
-            partie,
-            Rules(
-                setOf(
-                    MoveWithoutCross(),
-                    Turn(),
-                    Jump()
+                partie,
+                Rules(
+                        setOf(
+                                MoveWithoutCross(),
+                                Turn(),
+                                Jump()
+                        )
                 )
-            )
         )
 
         println(b)
@@ -46,22 +46,22 @@ class BoardTest {
 
         val factory = { x: Int, y: Int, b: Board<ZoneOfCoridor> ->
             ZoneOfCoridor(
-                x,
-                y
+                    x,
+                    y
             )
         }
         val b = Board<ZoneOfCoridor>(
-            10, 10, factory
+                10, 10, factory
         )
 
         val coridor =
-            drawDirectCoridorH(
-                b,
-                PointImpl(4, 2),
-                PointImpl(9, 5)
-            )
+                drawDirectCoridorH(
+                        b,
+                        PointImpl(4, 2),
+                        PointImpl(9, 5)
+                )
 
-        coridor.forEachIndexed { index: Int, ZoneOfCoridor: ZoneOfCoridor -> ZoneOfCoridor.haveBeenVisited = index+1; }
+        coridor.forEachIndexed { index: Int, ZoneOfCoridor: ZoneOfCoridor -> ZoneOfCoridor.haveBeenVisited = index + 1; }
         println(b.toString { "" + it.haveBeenVisited })
         println(labyrinthToString(b, listOf(coridor)))
     }
@@ -72,20 +72,20 @@ class BoardTest {
 
         val factory = { x: Int, y: Int, b: Board<ZoneOfCoridor> ->
             ZoneOfCoridor(
-                x,
-                y
+                    x,
+                    y
             )
         }
         val b = Board<ZoneOfCoridor>(
-            10, 10, factory
+                10, 10, factory
         )
 
-        val coridor:List<ZoneOfCoridor> =
-            drawComplexCoridorH(
-                b,
-                PointImpl(4, 2),
-                PointImpl(9, 5)
-            )
+        val coridor: List<ZoneOfCoridor> =
+                drawComplexCoridorH(
+                        b,
+                        PointImpl(4, 2),
+                        PointImpl(9, 5)
+                )
 
         coridor.forEachIndexed { index: Int, ZoneOfCoridor: ZoneOfCoridor -> ZoneOfCoridor.haveBeenVisited = index + 1 }
         println(b.toString {
@@ -106,28 +106,28 @@ class BoardTest {
 
         val factory = { x: Int, y: Int, b: Board<ZoneOfCoridor> ->
             ZoneOfCoridor(
-                x,
-                y
+                    x,
+                    y
             )
         }
         val b = Board<ZoneOfCoridor>(
-            10, 10, factory
+                10, 10, factory
         )
 
         val coridor =
-            drawDirectCoridorH(
-                b,
-                PointImpl(4, 2),
-                PointImpl(9, 5)
-            )
+                drawDirectCoridorH(
+                        b,
+                        PointImpl(4, 2),
+                        PointImpl(9, 5)
+                )
 
 
-        coridor.forEachIndexed { index: Int, ZoneOfCoridor: ZoneOfCoridor -> ZoneOfCoridor.haveBeenVisited = index+1; }
+        coridor.forEachIndexed { index: Int, ZoneOfCoridor: ZoneOfCoridor -> ZoneOfCoridor.haveBeenVisited = index + 1; }
         println(b.toString { "" + it.haveBeenVisited })
 
         val coridor2 = addComplexityToCoridorAtElement(b, coridor, b.get(9, 2)!!)
 
-        coridor2.forEachIndexed { index: Int, ZoneOfCoridor: ZoneOfCoridor -> ZoneOfCoridor.haveBeenVisited = index+1; }
+        coridor2.forEachIndexed { index: Int, ZoneOfCoridor: ZoneOfCoridor -> ZoneOfCoridor.haveBeenVisited = index + 1; }
         println(b.toString {
             if (it.haveBeenVisited == 0) {
                 " "
@@ -141,20 +141,18 @@ class BoardTest {
     }
 
 
-
-
     @Test
     fun shouldGenerateLabyrinth() {
         val factory = { x: Int, y: Int, b: Board<ZoneOfCoridor> ->
             ZoneOfCoridor(
-                x,
-                y
+                    x,
+                    y
             )
         }
         val b = Board<ZoneOfCoridor>(
-            10, 10, factory
+                10, 10, factory
         )
-       val coridors= drawLabyrinth(b)
+        val coridors = drawLabyrinth(b)
         println("full lab")
         println(labyrinthToString(b, coridors))
 
@@ -162,12 +160,11 @@ class BoardTest {
         println(labyrinthToString(b, listOf(coridors.first())))
         println("only dead end ")
         println(
-            labyrinthToString(
-                b,
-                coridors.minus(coridors.first()) as List<List<ZoneOfCoridor>>
-            )
+                labyrinthToString(
+                        b,
+                        coridors.minus(coridors.first()) as List<List<ZoneOfCoridor>>
+                )
         )
-
 
 
     }

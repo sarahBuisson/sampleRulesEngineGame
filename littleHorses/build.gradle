@@ -4,8 +4,8 @@ buildscript {
     ext {
         kotlin_version = '1.3.40'
         kotlin_logging_version = "1.6.22"
-        coroutines_version ="0.23.3"
-        rules_version ="3.2.4"
+        coroutines_version = "0.23.3"
+        rules_version = "3.2.4"
     }
     dependencies {
         // classpath 'io.github.microutils:kotlin-logging:1.6.22'
@@ -61,7 +61,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     jcenter()
-    maven {url "https://kotlin.bintray.com/kotlinx"}
+    maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
 kotlin {
@@ -184,7 +184,6 @@ kotlin {
         mavenPublication {
             artifactId project.name + "-jvm"
         }
-        preparePublishing(it,this)
 
 
     }
@@ -198,14 +197,12 @@ kotlin {
             // Setup the Kotlin compiler options for the 'main' compilation:
             moduleKind = "umd"
         }
-        configurePublishingWithNPM(it, project.version, configurations,this)
     }
     metadata {
         mavenPublication {
             artifactId project.name + "-common"
         }
 
-        preparePublishing(it,this)
     }
 
 }
