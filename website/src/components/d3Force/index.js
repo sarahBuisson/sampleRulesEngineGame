@@ -1,8 +1,8 @@
 import * as d3 from 'd3';
-import React, {createRef, useRef,Component} from "react";
+import React, {createRef, useRef, Component} from "react";
 
 
-export  function D3(props) {
+export function D3(props) {
     const ref = useRef(null)
     const svg = d3.select(ref.current)
     svg.selectAll("circle").data([1, 2, 3]).enter().append('circle').attr('r', 10).append("div").text((it) => {
@@ -22,17 +22,19 @@ export  function D3(props) {
 
 export class D3Force extends Component {
 
-    constructor(props){
-        super(props);
+    constructor(props) {
+        super(props);/*
         console.log(props)
         const ref = useRef(null)
         this.svg = d3.select(ref.current)
         this.force = d3.forceSimulation(props.nodes)
             .force("charge", d3.forceManyBody())
-            .force("link", d3.forceLink().id(function(d) { return d.id; }))
+            .force("link", d3.forceLink().id(function (d) {
+                return d.id;
+            }))
             .force("x", d3.forceX(this.props.width / 2))
             .force("y", d3.forceY(this.props.height / 2));
-        d3.forceLink(props.links);
+        d3.forceLink(props.links);*/
     }
 
     componentDidMount() {
@@ -44,39 +46,44 @@ export class D3Force extends Component {
     }
 
     render() {
+        /*
+                const ref = createRef(null)
+                const svg = d3.select(ref.current)
+                svg.selectAll("circle").data([1, 2, 3]).enter().append('circle').attr('r', 10).append("div").text((it) => {
 
-        const ref = createRef(null)
-        const svg = d3.select(ref.current)
-        svg.selectAll("circle").data([1, 2, 3]).enter().append('circle').attr('r', 10).append("div").text((it) => {
-
-            console.log(it);
-            return it.name
-        });
-        return <div>SVG<svg
-            className="d3-component"
-            width={400}
-            height={200}
-            ref={ref}
-        /></div>
-
+                    console.log(it);
+                    return it.name
+                });
+                return <div>SVG
+                    <svg
+                        className="d3-component"
+                        width={400}
+                        height={200}
+                        ref={ref}
+                    />
+                </div>
+        */
+        return <div>sss</div>
     }
 
 }
 
 
 const styles = {
-    svg:{
+    svg: {
         width: "100%",
         height: "100%",
     }
 }
 
 
-
 export class Graph extends Component {
-    state ={
-        width: 600,
-        height: 600,
+    constructor() {
+        super();
+        this.setState({
+            width: 600,
+            height: 600,
+        })
     }
 
     // Set up the simulation, needed only once.
@@ -98,7 +105,7 @@ export class Graph extends Component {
                 .attr('y2', link => link.target.y)
 
             this.nodes
-                .attr('transform', d=> `translate(${d.x}, ${d.y})`)
+                .attr('transform', d => `translate(${d.x}, ${d.y})`)
         }
 
         // Let's select the svg component
@@ -106,7 +113,9 @@ export class Graph extends Component {
 
         // This is the classic way of building a simulation.
         this.simulation = d3.forceSimulation()
-            .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(60))
+            .force("link", d3.forceLink().id(function (d) {
+                return d.id;
+            }).distance(60))
             .force('charge', d3.forceManyBody().strength(-30))
             .force('center', d3.forceCenter(this.state.width / 2, this.state.height / 2))
             .on("tick", ticked);
@@ -127,7 +136,7 @@ export class Graph extends Component {
     }
 
     // This function loads the data in the simulation
-    loadData = (data) => {
+    loadData(data) {
 
         // Add new data to the group of links, with keys
         this.links = this.links
@@ -184,8 +193,8 @@ export class Graph extends Component {
         console.log("data loaded")
     }
 
-    render(){
-        let dataBasic = {nodes:this.props.nodes,links:this.props.links};
+    render() {
+        let dataBasic = {nodes: this.props.nodes, links: this.props.links};
         console.log(dataBasic)
         return (
             <div id="wrapper" ref="wrapper" style={styles.svg}>

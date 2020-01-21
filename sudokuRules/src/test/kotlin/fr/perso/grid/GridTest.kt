@@ -4,7 +4,7 @@ import fr.perso.rules.combinations
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class GridTest{
+class GridTest {
 
 
     @Test
@@ -18,9 +18,9 @@ class GridTest{
         var assos2_of_5 = combinations((1..5).toList(), 2)
         println(assos2_of_5)
 
-        var assos4_of_5=combinations((1..5).toList(),4)
+        var assos4_of_5 = combinations((1..5).toList(), 4)
         println(assos4_of_5)
-        assertEquals(listOf(setOf(1, 2,3,4), setOf(1, 2,3,5), setOf(1,2,4,5),setOf(1,3,4,5), setOf(2,3,4,5)), assos4_of_5)
+        assertEquals(listOf(setOf(1, 2, 3, 4), setOf(1, 2, 3, 5), setOf(1, 2, 4, 5), setOf(1, 3, 4, 5), setOf(2, 3, 4, 5)), assos4_of_5)
     }
 
 
@@ -36,8 +36,8 @@ class GridTest{
         RemovePossibleLockFromTheGroup<Int, Iterable<SCasePossible<Int>>>(2).execute(group)
 
         println(group)
-        assertEquals(setOf(1,2), c1.getPossibles().toSet())
-        assertEquals(setOf(1,2), c2.getPossibles().toSet())
+        assertEquals(setOf(1, 2), c1.getPossibles().toSet())
+        assertEquals(setOf(1, 2), c2.getPossibles().toSet())
         assertEquals(setOf(3), c3.getPossibles().toSet())
 
     }

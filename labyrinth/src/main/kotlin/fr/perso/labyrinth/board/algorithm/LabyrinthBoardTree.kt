@@ -6,8 +6,8 @@ import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.core.LambdaRule
 
 
-class DrawLabFacts<T:BoardZone>(val board: Board<T>)
-class DrawLabCaseFacts<T:BoardZone>(val zone: BoardZone, val board: Board<T>)
+class DrawLabFacts<T : BoardZone>(val board: Board<T>)
+class DrawLabCaseFacts<T : BoardZone>(val zone: BoardZone, val board: Board<T>)
 
 
 val ruleConnectEndCaseToAFreeNeighboor = LambdaRule<DrawLabCaseFacts<BoardZone>>({ facts ->
@@ -16,7 +16,7 @@ val ruleConnectEndCaseToAFreeNeighboor = LambdaRule<DrawLabCaseFacts<BoardZone>>
 
 }, { facts ->
     val freeNeighboors =
-        facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size == 0 }
+            facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size == 0 }
     if (freeNeighboors.isNotEmpty()) {
         val nextNei = freeNeighboors.entries.random();
         connectZone(facts.zone, nextNei.value!!, nextNei.key)
@@ -31,7 +31,7 @@ val ruleAddCrossToAFreeNeighboor = LambdaRule<DrawLabCaseFacts<BoardZone>>({ fac
 
 }, { facts ->
     val freeNeighboors =
-        facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size == 0 }
+            facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size == 0 }
     if (freeNeighboors.isNotEmpty()) {
         val nextNei = freeNeighboors.entries.random();
         connectZone(facts.zone, nextNei.value!!, nextNei.key)
@@ -46,7 +46,7 @@ val ruleConnectUnconnectedCaseToAnyConnectedNei = LambdaRule<DrawLabCaseFacts<Bo
 
 }, { facts ->
     val freeNeighboors =
-        facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size > 0 }
+            facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size > 0 }
 
     val nextNei = freeNeighboors.entries.random();
     connectZone(facts.zone, nextNei.value!!, nextNei.key)
@@ -60,7 +60,7 @@ val ruleConnectUnconnectedCaseToBestConnectedNei = LambdaRule<DrawLabCaseFacts<B
 
 }, { facts ->
     val freeNeighboors =
-        facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size > 0 }
+            facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size > 0 }
     if (freeNeighboors.isNotEmpty()) {
         val nextNei = freeNeighboors.entries.sortedBy { it.value.connections.size }.last();
         connectZone(facts.zone, nextNei.value!!, nextNei.key)
@@ -72,7 +72,7 @@ fun <T> runBookD(fact: T, rules: Rules<T>) {
     DefaultRulesEngine<T>().fire(rules, fact)
 }
 
-fun <T:BoardZone>drawLab(board: Board<T>): Board< T> {
+fun <T : BoardZone> drawLab(board: Board<T>): Board<T> {
 
     board.start = board.toList().random()
 
@@ -81,8 +81,8 @@ fun <T:BoardZone>drawLab(board: Board<T>): Board< T> {
     connectZone(board.start, firstC.value!!, firstC.key);
     var countFreeCase = board.toList().size;
     val rules = Rules(setOf(
-        ruleConnectEndCaseToAFreeNeighboor,
-        ruleConnectUnconnectedCaseToBestConnectedNei
+            ruleConnectEndCaseToAFreeNeighboor,
+            ruleConnectUnconnectedCaseToBestConnectedNei
     ))
     do {
         for (case in board.toList().shuffled()) {
@@ -104,8 +104,7 @@ fun <T:BoardZone>drawLab(board: Board<T>): Board< T> {
 }
 
 fun <T> chooseExit(board: Board<T>)
-        where T : BoardZone, T : Point
-{
+        where T : BoardZone, T : Point {
     val mapDistance = distance(board.start, board)
     board.exit = mapDistance.entries.maxBy { it.value }!!.key
     val mapDistanceS = distance(board.exit!!, board)
@@ -114,9 +113,7 @@ fun <T> chooseExit(board: Board<T>)
 }
 
 
-fun <T:BoardZone> distance(start: Point, board: Board<T>): Map<T, Int>
-
-{
+fun <T : BoardZone> distance(start: Point, board: Board<T>): Map<T, Int> {
     val distance = mutableMapOf<T, Int>()
     distance.put(board.get(start)!!, 0)
     val zones = board.toList()
@@ -127,7 +124,7 @@ fun <T:BoardZone> distance(start: Point, board: Board<T>): Map<T, Int>
             val dist = distance.get(board.get(pos)!!)
 
             val currentNei =
-                board.getNeigboursMap(pos).filter { currentZone.connections.containsValue(it.value) }
+                    board.getNeigboursMap(pos).filter { currentZone.connections.containsValue(it.value) }
 
 
             if (dist != null) {
@@ -155,7 +152,7 @@ fun coridorSize(start: Point, board: Board<BoardZone>): Map<BoardZone, Int> {
             val pos = PointImpl(currentZone.x, currentZone.y)
 
             val currentNei =
-                board.getNeigboursMap(pos).filter { currentZone.connections.containsValue(it.value) }
+                    board.getNeigboursMap(pos).filter { currentZone.connections.containsValue(it.value) }
 
             if (currentNei.size > 2) {
                 distance.put(board.get(pos)!!, 0)
@@ -187,7 +184,7 @@ fun complexite(start: Point, board: Board<BoardZone>): Map<BoardZone, Int> {
             val pos = PointImpl(currentZone.x, currentZone.y)
             val currentComplexite = complexite.get(board.get(pos)!!)
             val currentNei =
-                board.getNeigboursMap(pos).filter { currentZone.connections.containsValue(it.value) }
+                    board.getNeigboursMap(pos).filter { currentZone.connections.containsValue(it.value) }
             if (currentComplexite != null) {
 
                 currentNei.forEach { entry ->
@@ -197,8 +194,8 @@ fun complexite(start: Point, board: Board<BoardZone>): Map<BoardZone, Int> {
 
 
                     val neiOfNeighbour =
-                        board.getNeigboursMap(PointImpl(neigbour.x, neigbour.x))
-                            .filter { neigbour.connections.containsValue(it.value) }
+                            board.getNeigboursMap(PointImpl(neigbour.x, neigbour.x))
+                                    .filter { neigbour.connections.containsValue(it.value) }
 
                     val commonNeiDirection: Int;
                     if (neiOfNeighbour.containsKey(neiDirection))

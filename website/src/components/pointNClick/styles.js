@@ -1,7 +1,7 @@
- const styles = {
+const styles = {
 
     objectInInventory: {
-        width:"100px",
+        width: "100px",
         border: 'solid black'
     }
     ,
@@ -21,4 +21,4 @@
 
 
 };
- export default styles;
+export default styles;

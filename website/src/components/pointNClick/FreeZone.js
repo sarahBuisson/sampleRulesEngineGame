@@ -21,12 +21,12 @@ export class FreeZoneComponent extends Component {
         return <div onClick={() => this.props.clickOnObj(it)}
                     style={styleObj}
 
-        >{it.name} {it.destination&&it.destination.name}</div>;
+        >{it.name} {it.destination && it.destination.name}</div>;
     }
 
     render() {
         const {freeZone} = this.props;
-        const freeZoneJs= kotlinProxy(freeZone, false);
+        const freeZoneJs = kotlinProxy(freeZone, false);
         return <div>
             <div>zone {freeZone.name}</div>
 

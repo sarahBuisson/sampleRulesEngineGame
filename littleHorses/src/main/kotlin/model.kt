@@ -16,8 +16,8 @@ class Partie {
     }
 
     constructor(
-        players: List<Player>,
-        board: Board
+            players: List<Player>,
+            board: Board
     ) {
         this.players = players
         this.board = board
@@ -33,14 +33,14 @@ class Player {
     val horses: List<Horse>
 
     constructor(
-        name: String = "" + (1..10).random(),
-        startPosition: Position, size: Int = 6
+            name: String = "" + (1..10).random(),
+            startPosition: Position, size: Int = 6
     ) {
         this.name = name
         this.startPosition = startPosition
         stables = mutableListOf()
         for (i in 1..6) {
-            stables.add(Position("st"+i))
+            stables.add(Position("st" + i))
         }
         horses = mutableListOf()
         for (i in 1..size) {
@@ -53,9 +53,9 @@ data class Position(var name: String = "" + (1..59).random(), var content: Horse
 
 
 class Horse(
-    val player: Player,
-    var position: Position? = null,
-    val events: MutableList<String> = mutableListOf<String>()
+        val player: Player,
+        var position: Position? = null,
+        val events: MutableList<String> = mutableListOf<String>()
 )
 
 class Board {
@@ -88,7 +88,7 @@ fun printBoard(partie: Partie) {
 
     partie.board.road.forEach { position ->
         if (position.content == null) if (partie.players.any { it.startPosition == position }) print(
-            "s "
+                "s "
         ) else print(". ") else print(position.content!!.player.name + " ")
     }
     println("")

@@ -28,24 +28,20 @@ fun whoIsTheTurn(partie: Partie, player: Player, dice: Int): Player {
 }
 
 
-
-
-
-
 fun runPartieAuto(partie: Partie) {
     var nextPlayer = partie.players.first()
 
-var index=0;
+    var index = 0;
     while (someoneIsWinning(partie) == null) {
         index++
         val dice = (1..6).random()
-        println(""+index+" -> "+dice)
+        println("" + index + " -> " + dice)
         val possibles = runMovePossibleRules(partie, nextPlayer, dice)
         if (possibles.isNotEmpty()) {
 
             val choosen = possibles.toList().random()
             println(choosen)
-            choosen.first.events.add(choosen.second.comment+" "+choosen.second.position!!.name)
+            choosen.first.events.add(choosen.second.comment + " " + choosen.second.position!!.name)
             execTurn(partie, choosen.first, choosen.second.position!!)
         }
         nextPlayer = whoIsTheTurn(partie, nextPlayer, dice)

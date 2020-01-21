@@ -16,19 +16,20 @@ export class SkyscraperApp extends Component {
 
     }
 
-    resolve = () => {
+    resolve() {
         if (this.props.current)
             this.setState({current: kotlinProxy(sudoku.fr.perso.skyscraper).resolveGrid(this.props.current)})
 
     };
-    newGrid = () => {
+
+    newGrid() {
         this.setState({current: kotlinProxy(sudoku.fr.perso.skyscraper).generateEmptyGrid(5)})
         console.log(this.props.current)
 
     };
 
 
-    render = () => {
+    render() {
         return <div> welcome to the skyscraper !
 
             <GridComponent grid={this.state.current}/>

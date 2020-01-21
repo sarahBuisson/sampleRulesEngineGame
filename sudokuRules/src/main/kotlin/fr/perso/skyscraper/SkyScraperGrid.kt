@@ -44,8 +44,8 @@ class SkyScraperGrid : Grid<Int, SCasePossible<Int>, SkyScraperLine> {
     lateinit var row2: List<SkyScraperLine>
 
     constructor(
-        width: Int,
-        possibles: List<Int>
+            width: Int,
+            possibles: List<Int>
     ) : super(width, width, initPossibleValues(width)) {
 
 

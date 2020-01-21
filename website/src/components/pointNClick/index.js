@@ -18,26 +18,27 @@ class PointNClickApp extends Component {
 
     }
 
-    newGame = () => {
+    newGame() {
         this.props.newPartie(6);
     };
-    newLab = () => {
+
+    newLab() {
         this.props.newLab(6);
     };
 
-    selectObj = (obj) => {
+    selectObj(obj) {
         console.log("select")
         this.props.selectObj(obj);
     };
 
 
-    clickOnObj=(obj)=> {
+    clickOnObj(obj) {
 
         this.props.play(this.props.currentPartie, obj)
     };
 
 
-    renderPartie = (partie) => {
+    renderPartie(partie) {
         let partieJs = kotlinProxy(partie, false);
         let playerJs = kotlinProxy(partieJs.player, false);
         return <div>
@@ -49,16 +50,18 @@ class PointNClickApp extends Component {
                 selected: {playerJs.selected ? playerJs.selected.name : ''}
 
             </div>
-            <div><div>inventory:</div>{playerJs.inventoryArray.map(it => {
-                return <div style={styles.objectInInventory} onClick={()=>this.selectObj(it)}>{it.name}</div>
-            })}</div>
+            <div>
+                <div>inventory:</div>
+                {playerJs.inventoryArray.map(it => {
+                    return <div style={styles.objectInInventory} onClick={() => this.selectObj(it)}>{it.name}</div>
+                })}</div>
             <div>
                 <MapComponent zones={partieJs.levelArray}/>
             </div>
         </div>
     };
 
-    render = () => {
+    render() {
 
         const partie = this.props.currentPartie;
         let content;
@@ -86,16 +89,15 @@ class PointNClickApp extends Component {
 }
 
 
-
 function mapDispatchToProps(dispatch) {
     return {...bindActionCreators({newPartie: newPartiePointNClick, play, newLab, selectObj}, dispatch)}
 };
 
-function mapStateToProps(state, ownProps){
+function mapStateToProps(state, ownProps) {
 
     return {
         ...ownProps,
-        currentPartie: state.currentPartie
+        currentPartie: this.state.currentPartie
     }
 }
 

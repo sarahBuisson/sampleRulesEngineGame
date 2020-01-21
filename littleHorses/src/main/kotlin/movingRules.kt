@@ -3,13 +3,13 @@ import org.jeasy.rules.core.BasicRule
 import org.jeasy.rules.core.DefaultRulesEngine
 
 data class MovingFact(
-    val partie: Partie,
-    val horse: Horse,
-    val player: Player,
-    var position: Position?,
-    val diceValue: Int,
-    var distance: Int = diceValue,
-    var regularMovingSence: Boolean = true
+        val partie: Partie,
+        val horse: Horse,
+        val player: Player,
+        var position: Position?,
+        val diceValue: Int,
+        var distance: Int = diceValue,
+        var regularMovingSence: Boolean = true
 
 ) {
 
@@ -25,8 +25,8 @@ class goToStableRule() : BasicRule<MovingFact>() {
         val stablePosition = facts.partie.board.previousPosition(facts.player.startPosition)
         val horseAtTheEnter = facts.position == stablePosition
         val horseStop = facts.distance == 1
-        val firstStableEmpty= facts.player.stables.first().content==null
-        val goToStable = horseAtTheEnter && horseStop && facts.diceValue == 1 &&firstStableEmpty
+        val firstStableEmpty = facts.player.stables.first().content == null
+        val goToStable = horseAtTheEnter && horseStop && facts.diceValue == 1 && firstStableEmpty
         return goToStable
     }
 
@@ -45,7 +45,7 @@ class goBAckAfterStableToStableRule() : BasicRule<MovingFact>() {
 
         val stablePosition = facts.partie.board.previousPosition(facts.player.startPosition)
 
-        return facts.position == stablePosition &&facts.diceValue!=1
+        return facts.position == stablePosition && facts.diceValue != 1
     }
 
     override fun execute(facts: MovingFact) {
@@ -62,8 +62,8 @@ class moveStableRule() : BasicRule<MovingFact>() {
 
     override fun evaluate(facts: MovingFact): Boolean {
         val currentPosition = facts.player.stables.indexOf(facts.position);
-        val stableFree= nextStable(facts).content==null
-        return currentPosition!=-1 && (currentPosition+2) == facts.diceValue &&stableFree
+        val stableFree = nextStable(facts).content == null
+        return currentPosition != -1 && (currentPosition + 2) == facts.diceValue && stableFree
     }
 
     override fun execute(facts: MovingFact) {
@@ -149,17 +149,17 @@ class lastcaseOccupedByAHorse() : BasicRule<MovingFact>() {
 
 //getAPossibleDestination for a horse. Don't move-it
 val rulesPossibleMove =
-    Rules<MovingFact>(
-        setOf(
-            moveStableRule(),
-            goToStableRule(),
-            goBAckAfterStableToStableRule(),
-            goInTheRoad(),
-            moveBack(),
-            move(),
-            lastcaseOccupedByAHorse()
+        Rules<MovingFact>(
+                setOf(
+                        moveStableRule(),
+                        goToStableRule(),
+                        goBAckAfterStableToStableRule(),
+                        goInTheRoad(),
+                        moveBack(),
+                        move(),
+                        lastcaseOccupedByAHorse()
+                )
         )
-    )
 
 fun runMovePossibleRules(partie: Partie, player: Player, dice: Int): Map<Horse, MovingFact> {
     val mapRet = HashMap<Horse, MovingFact>()

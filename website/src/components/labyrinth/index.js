@@ -4,17 +4,18 @@ import {connect} from "react-redux";
 
 import {bindActionCreators} from "redux";
 import {kotlinProxy} from "../../util";
-import {newLabObj,newLab, newPartiePointNClick, play, selectObj} from "../../services/actions";
+import {newLabObj, newLab, newPartiePointNClick, play, selectObj} from "../../services/actions";
 
 class Labyrinth extends Component {
     constructor() {
         super();
     }
 
-    handleNewGame = () => {
+    handleNewGame() {
         this.props.newLabObj(6);
     };
-  handleNewLab = () => {
+
+    handleNewLab() {
         this.props.newLab(6);
     };
 
@@ -23,8 +24,8 @@ class Labyrinth extends Component {
 
 
         return <div style={styles.boardZoneContainer}>
-            <div style={styles.boardZoneContent} >
-                {zoneJs.contentArray.map((c=>c.name))}
+            <div style={styles.boardZoneContent}>
+                {zoneJs.contentArray.map((c => c.name))}
             </div>
         </div>
     }
@@ -60,11 +61,11 @@ function mapDispatchToProps(dispatch) {
     return {...bindActionCreators({newPartie: newPartiePointNClick, play, newLabObj, selectObj}, dispatch)}
 };
 
-function mapStateToProps(state, ownProps){
+function mapStateToProps(state, ownProps) {
 
     return {
         ...ownProps,
-        currentPartie: state.currentLabPartie
+        currentPartie: this.state.currentLabPartie
     }
 }
 

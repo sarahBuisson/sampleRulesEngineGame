@@ -25,19 +25,18 @@ class ObjectInv(val type: ObjectType)
 
 
 data class Partie(
-    var cursor: Cursor,
-    var board: Board<ZoneOfCoridor>, var currentUsedObject: ObjectInv? = null
+        var cursor: Cursor,
+        var board: Board<ZoneOfCoridor>, var currentUsedObject: ObjectInv? = null
 )
 
 
-
 class Cursor(var position: PointImpl, var direction: Direction = Direction.TOP) {
-    var distance=0
+    var distance = 0
 }
 
-open class RandomRunRule<P>(protected var proba:Double=1.0) : BasicRule<P>() {
+open class RandomRunRule<P>(protected var proba: Double = 1.0) : BasicRule<P>() {
 
-    override fun evaluate(facts: P): Boolean= (1..10).random()<proba*10
+    override fun evaluate(facts: P): Boolean = (1..10).random() < proba * 10
 
 }
 
@@ -46,9 +45,13 @@ open class Jump : Move {
     override fun evaluate(partie: Partie): Boolean {
         println("walk")
         val newPosition = newPosition(partie, partie.cursor.direction.times(2))
-        return super.evaluate(partie)&& ((partie.board.get(newPosition)?.haveBeenVisited ?: 0)<=0)
+        return super.evaluate(partie) && ((partie.board.get(newPosition)?.haveBeenVisited ?: 0) <= 0)
     }
-    constructor() : super() {proba=0.5}
+
+    constructor() : super() {
+        proba = 0.5
+    }
+
     open override fun execute(partie: Partie) {
         super.execute(partie)
         println("fr.perso.labyrinth.board.algorithm.Jump")
@@ -58,7 +61,7 @@ open class Jump : Move {
         val newPosition = partie.board.get(newPPosition)!!
         val oldPosition = partie.board.get(oldPPosition)!!
 
-        newPosition.haveBeenVisited= partie.cursor.distance;
+        newPosition.haveBeenVisited = partie.cursor.distance;
         newPosition.connectedZoneAndWayToGo.put(oldPosition, Condition.TRUE as Condition<Partie>)
         oldPosition.connectedZoneAndWayToGo.put(newPosition, Condition.TRUE as Condition<Partie>)
 
@@ -69,18 +72,19 @@ open class Jump : Move {
     protected fun newPosition(partie: Partie) = partie.cursor.position.add(partie.cursor.direction.times(1))
 
 }
+
 open class Move() : RandomRunRule<Partie>() {
 
     open override fun execute(partie: Partie) {
         super.execute(partie)
         println("move")
-        val newPPosition = newPosition(partie,partie.cursor.direction.times(1))
+        val newPPosition = newPosition(partie, partie.cursor.direction.times(1))
         val oldPPosition = partie.cursor.position
 
         val newPosition = partie.board.get(newPPosition)!!
         val oldPosition = partie.board.get(oldPPosition)!!
 
-        newPosition.haveBeenVisited= partie.cursor.distance;
+        newPosition.haveBeenVisited = partie.cursor.distance;
         newPosition.connectedZoneAndWayToGo.put(oldPosition, Condition.TRUE as Condition<Partie>)
         oldPosition.connectedZoneAndWayToGo.put(newPosition, Condition.TRUE as Condition<Partie>)
 
@@ -106,7 +110,7 @@ class MoveWithoutCross : Move() {
     override fun evaluate(partie: Partie): Boolean {
         println("walk")
         val newPosition = newPosition(partie, partie.cursor.direction.times(1))
-        return super.evaluate(partie)&& ((partie.board.get(newPosition)?.haveBeenVisited ?: 0)<=0)
+        return super.evaluate(partie) && ((partie.board.get(newPosition)?.haveBeenVisited ?: 0) <= 0)
     }
 }
 
@@ -118,26 +122,26 @@ fun main() {
 
     val factory = { x: Int, y: Int, b: Board<ZoneOfCoridor> ->
         ZoneOfCoridor(
-            x,
-            y
+                x,
+                y
         )
     }
     val b = Board<ZoneOfCoridor>(
-        10, 10, factory
+            10, 10, factory
     )
 
     val partie =
-        Partie(
-            Cursor(
-                PointImpl(
-                    0,
-                    0
-                )
-            ), b
-        )
+            Partie(
+                    Cursor(
+                            PointImpl(
+                                    0,
+                                    0
+                            )
+                    ), b
+            )
     runBook(
-        partie,
-        Rules(setOf(MoveWithoutCross(), Turn()))
+            partie,
+            Rules(setOf(MoveWithoutCross(), Turn()))
     )
 
     println(b)

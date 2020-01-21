@@ -20,7 +20,6 @@ class SudokuGridGenerateTest {
     }
 
 
-
     @Test
     fun shouldGenerateFull9Facile() {
 
@@ -34,18 +33,17 @@ class SudokuGridGenerateTest {
 
         var grid = generateFullSudoku(SudokuGrid(3, 3, initPossibleValues(3 * 3)))
         println(grid)
-        var gridClean=generateCleanedSudoku(grid,50)
+        var gridClean = generateCleanedSudoku(grid, 50)
         println(gridClean)
-         gridClean=generateCleanedSudoku(gridClean,20)
+        gridClean = generateCleanedSudoku(gridClean, 20)
         println(gridClean)
-        gridClean=generateCleanedSudoku(gridClean,8)
+        gridClean = generateCleanedSudoku(gridClean, 8)
         println(gridClean)
-        var resolved= resolveGrid(gridClean)
+        var resolved = resolveGrid(gridClean)
 
         println("resolvedGrid")
         println(resolved)
     }
-
 
 
     @Test
@@ -53,9 +51,9 @@ class SudokuGridGenerateTest {
 
         var grid = generateFullSudoku(SudokuGrid(3, 3, initPossibleValues(3 * 3)))
         println(grid)
-        var gridClean=generateCleanedSudoku(grid,30)
+        var gridClean = generateCleanedSudoku(grid, 30)
         println(gridClean)
-       var resolved= resolveGrid(gridClean)
+        var resolved = resolveGrid(gridClean)
 
         println("resolvedGrid")
         println(resolved)
@@ -67,14 +65,13 @@ class SudokuGridGenerateTest {
 
         var grid = generateFullSudoku(SudokuGrid(3, 3, initPossibleValues(3 * 3)))
         println(grid)
-        var gridClean=generateCleanedSudoku(grid,30, ResolveSudokuGridEasy<Int>())
+        var gridClean = generateCleanedSudoku(grid, 30, ResolveSudokuGridEasy<Int>())
         println(gridClean)
-       var resolved= resolveGrid(gridClean)
+        var resolved = resolveGrid(gridClean)
 
         println("resolvedGrid")
         println(resolved)
     }
-
 
 
     @Test
@@ -84,9 +81,9 @@ class SudokuGridGenerateTest {
         println(grid)
         assertTrue(ResolveSudokuGrid<Int>().isGridPossibleValid(grid))
 
-        var gridClean=generateCleanedSudoku(grid,15)
+        var gridClean = generateCleanedSudoku(grid, 15)
         println(gridClean)
-        var resolved= resolveGrid(gridClean)
+        var resolved = resolveGrid(gridClean)
 
         println("resolvedGrid")
         println(resolved)
@@ -100,10 +97,10 @@ class SudokuGridGenerateTest {
 
         val resolverSudokuGrid = ResolveSudokuGridDifficult<Int>()
 
-        var gridClean= generateCleanedSudoku(grid,9, resolverSudokuGrid)
+        var gridClean = generateCleanedSudoku(grid, 9, resolverSudokuGrid)
         println(gridClean)
 
-        var resolved= resolverSudokuGrid.run(gridClean)
+        var resolved = resolverSudokuGrid.run(gridClean)
 
         println("resolvedGrid")
         println(resolved)

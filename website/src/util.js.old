@@ -1,0 +1,175 @@
+import get from 'lodash/get';
+/*
+export function kotlinProxy(kotlinInstance, goDeep = true) {
+    if (kotlinInstance === undefined || kotlinInstance === null) {
+        return kotlinInstance
+    } else if (typeof kotlinInstance === 'function') {
+
+        return (...args) => {
+
+            const retourMethod = kotlinInstance.apply(null, args)
+            return kotlinProxy(retourMethod, goDeep);
+
+        }
+    } else if (typeof kotlinInstance !== 'object') {
+        return kotlinInstance
+    } else {
+        let className = get(kotlinInstance, '__proto__.constructor.name');
+
+
+        if (className === 'ArrayList') {
+            let arrayName = Object.getOwnPropertyNames(kotlinInstance)
+                .filter((itemArray) => {
+                    return itemArray.startsWith("array")
+                })[0];
+            return kotlinInstance[arrayName].map((item) => {
+                if (goDeep) {
+                    return kotlinProxy(item, goDeep)
+                } else {
+                    return item;
+
+                }
+            })
+        } else {
+
+            let newkotlinInstance = {}
+
+            console.log(Object.getOwnPropertyNames(kotlinInstance))
+            Object.getOwnPropertyNames(kotlinInstance).forEach(
+                (oldName) => {
+                    let newName = oldName.replace(/\_\S*\$/, "").replace(/\_\d/, "");
+                    let propertyclassName = get(kotlinInstance, oldName + '.__proto__.constructor.name');
+                    if (propertyclassName === 'ArrayList') {
+                        newName += "Array"
+                    }
+                    let descriptor = Object.getOwnPropertyDescriptor(newkotlinInstance, newName);
+                    if (!descriptor && !kotlinInstance.__proto__[newName]) {
+                        try {
+
+                            if (goDeep || propertyclassName === 'ArrayList') {
+                                newkotlinInstance[newName] = kotlinProxy(kotlinInstance[oldName], goDeep)
+                            } else {
+                                newkotlinInstance[newName] = kotlinInstance[oldName]
+                            }
+                        } catch (e) {
+                            console.error(e)
+                        }
+
+                    }
+
+                }
+            )
+
+            return newkotlinInstance
+        }
+
+
+    }
+
+    return kotlinInstance;
+}
+*/
+
+ function kotlinProxy2(kotlinInstance) {
+
+
+    console.log(Object.getOwnPropertyNames(kotlinInstance))
+    Object.getOwnPropertyNames(kotlinInstance).map(
+        (oldName) => {
+            let newName = oldName.replace(/\_\S*\$/, "").replace(/\_\d/, "");
+            let descriptor = Object.getOwnPropertyDescriptor(kotlinInstance, oldName);
+            console.log("descriptor")
+            console.log(descriptor)
+            console.log((typeof descriptor.value))
+            console.log(oldName + ' -> ' + newName + ":" + (kotlinInstance[newName]))
+            console.log(kotlinInstance[oldName])
+            let className = get(kotlinInstance, oldName + '.__proto__.constructor.name');
+            console.log("className " + className)
+            console.log(kotlinInstance[oldName] && kotlinInstance[oldName].__proto__ && kotlinInstance[oldName].__proto__.constructor.name)
+            if (oldName != newName && descriptor && !kotlinInstance[newName]) {
+                console.log(oldName + ' -> ' + newName + " : build")
+                if ((typeof descriptor.value) === 'function') {
+                    kotlinInstance[newName] = (...args) => {
+                        console.log("call " + newName + " ")
+                        console.log(args)
+                        const retourMethod = kotlinInstance[oldName].apply(null, args)
+                        return retourMethod;
+
+                    }
+                    console.log("F")
+                    console.log(kotlinInstance[newName])
+                } else if (false && className === 'ArrayList') {
+                    console.log("buildArrayForGetter")
+                    Object.defineProperty(kotlinInstance.__proto__, newName, {
+                        get: () => {
+                            console.log("arrayrrrr")
+                            let array = Object.getOwnPropertyNames(kotlinInstance[oldName])
+                                .filter((itemArray) => {
+                                    itemArray.startsWith("array")
+                                })[0];
+                            console.log("arrayrrrr")
+                            console.log(array)
+                            return kotlinInstance[oldName][array]
+
+
+                        },
+                        set: () => {
+                        }
+                    });
+
+                }
+
+
+                /* else if (kotlinInstance[oldName] && typeof kotlinInstance[oldName] === 'object') {
+                kotlinInstance[newName] = kotlinProxy(kotlinInstance[oldName])
+            } else {
+
+                kotlinInstance[newName] = kotlinInstance[oldName]
+
+            }*/
+            }
+        }
+    );
+    return kotlinInstance;
+}
+
+ function kotlinProxyOld(kotlinInstance) {
+    let proxy = {kotlinInstance}
+    Object.getOwnPropertyNames(kotlinInstance).map(
+        (oldName) => {
+            let newName = oldName.replace(/\_\S*\$/, "");
+            if (proxy[newName] != null) {
+                //a method already exist with the same Name, so we would keep the old one
+                newName = oldName
+            }
+            console.log("vdd " + oldName);
+            console.log(kotlinInstance);
+            console.log(kotlinInstance.__proto__);
+            console.log(kotlinInstance[oldName]);
+            console.log(kotlinInstance[oldName].__proto__);
+            console.log(kotlinInstance[oldName].__proto__ && kotlinInstance[oldName].__proto__.name);
+            console.log("vdd1 ");
+            console.log(kotlinInstance[oldName] && typeof kotlinInstance[oldName])
+            console.log("vdd2 ");
+            if (kotlinInstance[oldName] && typeof kotlinInstance[oldName] === 'function') {
+                proxy[newName] = (...arg) => {
+
+                    const retourMethod = proxy.kotlinInstance[oldName].call(arg)
+                    console.log("vddzd ");
+                    console.log(retourMethod && typeof retourMethod);
+                    if (retourMethod && typeof retourMethod === 'object')
+                        return kotlinProxy(retourMethod);
+                    else return retourMethod;
+
+                }
+            } else if (kotlinInstance[oldName] && typeof kotlinInstance[oldName] === 'object') {
+                proxy[newName] = kotlinProxy(kotlinInstance[oldName])
+            } else {
+
+                proxy[newName] = kotlinInstance[oldName]
+
+            }
+        }
+    );
+    return proxy;
+}

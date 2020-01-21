@@ -1,4 +1,5 @@
 package fr.perso.skyscraper
+
 import fr.perso.SCasePossible
 import fr.perso.rules.*
 import org.jeasy.rules.api.Rule
@@ -23,17 +24,17 @@ class GenerationView(
 
 
 class GenerationSkyScraperGrid() :
-    ResolveGrid<Int, SkyScraperLine, SkyScraperGrid>() {
+        ResolveGrid<Int, SkyScraperLine, SkyScraperGrid>() {
 
     override var gridRules: Rules<out SkyScraperGrid> = Rules(setOf(FillRandomlyOneCase(this::isGridPossibleValid, this::execute)))
     open override var caseRules: Rules<SCasePossible<Int>> = Rules(setOf(OnePossibiliteSet<Int>()))
     open override var groupeRules: Rules<out SkyScraperLine> = Rules(
-        setOf<Rule<SkyScraperLine>>(
-            RemoveSureValueFromTheRestOfTheGroup<Int, SkyScraperLine>(),
-            RemovePossibleLockFromTheGroup<Int, SkyScraperLine>(2),
-            GenerationView()
+            setOf<Rule<SkyScraperLine>>(
+                    RemoveSureValueFromTheRestOfTheGroup<Int, SkyScraperLine>(),
+                    RemovePossibleLockFromTheGroup<Int, SkyScraperLine>(2),
+                    GenerationView()
 
-        )
+            )
     )
 
     override fun errorInTheGrid(grid: SkyScraperGrid): List<Any> {

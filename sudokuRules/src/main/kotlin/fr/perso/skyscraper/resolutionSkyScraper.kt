@@ -33,7 +33,7 @@ fun removePossiForAllowTheView(list: Iterable<SCasePossible<Int>>, count: Int, m
     var maxPossi: Int = list.last().getPossibles().maxBy { it.hashCode() }!! + 1
     list.reversed().forEachIndexed { index, case: SCasePossible<Int> ->
         case.getPossibles().filter { pos -> pos >= maxPossi }
-            .forEach { pos -> case.removePossibilite(pos) }
+                .forEach { pos -> case.removePossibilite(pos) }
         maxPossi = case.getPossibles().maxBy { it.hashCode() }!!
 
 
@@ -57,7 +57,7 @@ fun removePossiForACrescentView(list: Collection<SCasePossible<Int>>, count: Int
 
 
             case.getPossibles().filter { pos -> pos <= minPossi }
-                .forEach { pos -> case.removePossibilite(pos) }
+                    .forEach { pos -> case.removePossibilite(pos) }
 
             minPossi = case.getPossibles().minBy { it.hashCode() }!!
         }
@@ -127,7 +127,7 @@ fun whichTowerShouldBeVisible(line: SkyScraperLine): List<Boolean?> {
     val shouldBeVisible: List<Boolean?>
 
     val allTheCurrentlyVisibleAllowTheViewCount =
-        actualLineVisibility.subList(0, maxIndexBiggerTower + 1).filter { it == true }.size == line.view
+            actualLineVisibility.subList(0, maxIndexBiggerTower + 1).filter { it == true }.size == line.view
     if (allTheCurrentlyVisibleAllowTheViewCount) {
         //only the one we are sure are visible should stay visible
         //TODO : don't apply to the one after the mac val !
@@ -138,7 +138,7 @@ fun whichTowerShouldBeVisible(line: SkyScraperLine): List<Boolean?> {
 
     } else {
         val allTheCurentlyVisibleAndNotSureIfVisibleShouldBeVisibleToAllowTheCount =
-            actualLineVisibility.subList(0, maxIndexBiggerTower + 1).filter { it != false }.size == line.view
+                actualLineVisibility.subList(0, maxIndexBiggerTower + 1).filter { it != false }.size == line.view
         if (allTheCurentlyVisibleAndNotSureIfVisibleShouldBeVisibleToAllowTheCount) {
             //all who can be visible should be show
             //TODO : don't apply to the one after the mac val !
@@ -153,11 +153,11 @@ fun whichTowerShouldBeVisible(line: SkyScraperLine): List<Boolean?> {
     return shouldBeVisible;
 }
 
-   fun removPossiAccordingToWhichTowerShouldBeVisible(line: SkyScraperLine){
-       val shouldBeVisible= whichTowerShouldBeVisible(line);
+fun removPossiAccordingToWhichTowerShouldBeVisible(line: SkyScraperLine) {
+    val shouldBeVisible = whichTowerShouldBeVisible(line);
 
-       var minIndexBiggerTower = max(line.view, line.indexOfFirst { it.getPossibles().contains(line.size) })
-       var maxIndexBiggerTower = max(line.view, line.indexOfLast { it.getPossibles().contains(line.size) })
+    var minIndexBiggerTower = max(line.view, line.indexOfFirst { it.getPossibles().contains(line.size) })
+    var maxIndexBiggerTower = max(line.view, line.indexOfLast { it.getPossibles().contains(line.size) })
     var min = 0;
     var count = 0;
     line.subList(0, minIndexBiggerTower).forEachIndexed { index, sCasePossible ->
@@ -175,7 +175,7 @@ fun whichTowerShouldBeVisible(line: SkyScraperLine): List<Boolean?> {
 
         } else if (shouldBeVisible[index] == false) {
             val lastVisible = line.subList(0, index)
-                .filterIndexed { index, it -> shouldBeVisible[index] != false }.last()
+                    .filterIndexed { index, it -> shouldBeVisible[index] != false }.last()
             lastVisible.removePossibilites(IntRange(0, minPossi(sCasePossible)))
             sCasePossible.removePossibilites(IntRange(maxPossi(lastVisible), line.size))
         }
@@ -199,7 +199,6 @@ fun whichTowerShouldBeVisible(line: SkyScraperLine): List<Boolean?> {
 
 
     }
-
 
 
 }
@@ -295,18 +294,16 @@ class RemoveMin(
 }
 
 
-
-
 class RemoveUnrespectingCombination(
 ) : BasicRule<SkyScraperLine>() {
 
     override fun execute(group: SkyScraperLine) {
-      val combinations =  combinationRespectingUnicity(group)//This combination respects JUST the unicity rule, but not always the view count
+        val combinations = combinationRespectingUnicity(group)//This combination respects JUST the unicity rule, but not always the view count
 
-        val possiRespectingView= mutableListOf<MutableList<Int>>()
+        val possiRespectingView = mutableListOf<MutableList<Int>>()
         combinations.filter {
             val count = countViewableCase(it)
-             (count == group.view)
+            (count == group.view)
 
         }.forEach {
 
@@ -320,9 +317,9 @@ class RemoveUnrespectingCombination(
 
         }
 
-        group.forEachIndexed{index,case->
-            case.getPossibles().forEach{possi->
-                if(!possiRespectingView[index].contains(possi))
+        group.forEachIndexed { index, case ->
+            case.getPossibles().forEach { possi ->
+                if (!possiRespectingView[index].contains(possi))
                     case.removePossibilite(possi)
             }
 
@@ -334,32 +331,26 @@ class RemoveUnrespectingCombination(
 }
 
 
-
-
-
-
-
-
 class ResolveSkyScraperGrid() :
-    ResolveGrid<Int, SkyScraperLine, SkyScraperGrid>() {
+        ResolveGrid<Int, SkyScraperLine, SkyScraperGrid>() {
     override var gridRules: Rules<out SkyScraperGrid> = Rules(
-        setOf(
-          //  UseRandomHypothesis(this::isGridPossibleValid, this::execute)
-        )
+            setOf(
+                    //  UseRandomHypothesis(this::isGridPossibleValid, this::execute)
+            )
     )
     override var caseRules = Rules(setOf(OnePossibiliteSet<Int>()))
     override var groupeRules: Rules<out SkyScraperLine> = Rules(
-        setOf<Rule<SkyScraperLine>>(
-            OneViewVisibleRule(),
-            StairViewRule(),
-            RemoveSureValueFromTheRestOfTheGroup<Int, SkyScraperLine>(),
-            RemovePossibleLockFromTheGroup<Int, SkyScraperLine>(),
-            RemovePossibleForViewGroup(),
-            ComplexeVisiblePossibleRule(),
-            RemoveMin(),
-            RemoveMax(),
-            RemoveUnrespectingCombination()
-        )
+            setOf<Rule<SkyScraperLine>>(
+                    OneViewVisibleRule(),
+                    StairViewRule(),
+                    RemoveSureValueFromTheRestOfTheGroup<Int, SkyScraperLine>(),
+                    RemovePossibleLockFromTheGroup<Int, SkyScraperLine>(),
+                    RemovePossibleForViewGroup(),
+                    ComplexeVisiblePossibleRule(),
+                    RemoveMin(),
+                    RemoveMax(),
+                    RemoveUnrespectingCombination()
+            )
     )
 
     override fun errorInTheGrid(grid: SkyScraperGrid): List<Any> {
@@ -376,6 +367,7 @@ class ResolveSkyScraperGrid() :
 
         }.flatten()
     }
+
     override fun isGridPossibleValid(grid: SkyScraperGrid): Boolean {
 
         val errors = errorInTheGrid(grid)

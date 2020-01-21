@@ -21,9 +21,9 @@ class App extends Component {
     }
 
     render() {
-console.log("d3Force")
-console.log(D3Force)
-        return (<div>myapp
+        console.log("d3Force")
+        console.log(D3Force)
+        return (<div> myapp
                 <Router>
                     <ul>
                         <li>
@@ -46,7 +46,7 @@ console.log(D3Force)
                         ></Route>
 
                         <Route exact path="/sudoku"
-                               render={() => <SudokuApp/>}
+                               render={() => <SudokuApp key={"rr"}/>}
                         ></Route>
 
                         <Route exact path="/skyscraper"
@@ -66,16 +66,17 @@ console.log(D3Force)
                         <Route exact path="/d3Force"
                                render={() => {
                                    var nodes = [
-                                       {"id": "Alice", x:10,y:20},
-                                       {"id": "Bob", x:30,y:20},
-                                       {"id": "Carol", x:10,y:50}
+                                       {"id": "Alice", x: 10, y: 20},
+                                       {"id": "Bob", x: 30, y: 20},
+                                       {"id": "Carol", x: 10, y: 50}
                                    ];
 
                                    var links = [
                                        {"source": "Alice", "target": "Bob"},
                                        {"source": "Bob", "target": "Carol"}
                                    ];
-                                   return <div><D3/><Graph nodes={nodes} links={links}/></div>}
+                                   return <div><D3/><Graph nodes={nodes} links={links}/></div>
+                               }
                                }
                         ></Route>
                     </Switch>

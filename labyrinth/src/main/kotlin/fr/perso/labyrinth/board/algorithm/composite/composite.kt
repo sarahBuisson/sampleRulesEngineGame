@@ -14,7 +14,7 @@ import fr.perso.labyrinth.freezone.generation.LabFiller
 import fr.perso.labyrinth.freezone.generation.ObjectZone
 import fr.perso.labyrinth.freezone.generation.createLab
 
-class CompositeZone(x: Int, y: Int) : GeoZone, ConnectedZone,BoardZone, BoardZoneImpl(x, y) {
+class CompositeZone(x: Int, y: Int) : GeoZone, ConnectedZone, BoardZone, BoardZoneImpl(x, y) {
 
     override val content: MutableList<ObjectZone> = mutableListOf<ObjectZone>()
 
@@ -24,12 +24,12 @@ class CompositeZone(x: Int, y: Int) : GeoZone, ConnectedZone,BoardZone, BoardZon
 fun generateComposite(size: Int): Board<CompositeZone> {
     val factory = { x: Int, y: Int, b: Board<CompositeZone> ->
         CompositeZone(
-            x,
-            y
+                x,
+                y
         )
     }
     val board = Board<CompositeZone>(
-        10, 10, factory
+            10, 10, factory
     )
     //When
     drawLab(board)
@@ -38,13 +38,13 @@ fun generateComposite(size: Int): Board<CompositeZone> {
     var doorWithKey = ('A'..'Z').map { arrayOf("" + it, "" + it.toLowerCase()) }.toTypedArray()
 
 
-    LabFiller<CompositeZone>(doorWithKey).fillLab(board.toList(), board.start,10, 0)
+    LabFiller<CompositeZone>(doorWithKey).fillLab(board.toList(), board.start, 10, 0)
     return board
 }
 
 
-fun initPartieComposite(size:Int=5): Partie {
-    var lab= generateComposite(size)
+fun initPartieComposite(size: Int = 5): Partie {
+    var lab = generateComposite(size)
     return Partie(Player(lab.start), lab.toList())
 }
 

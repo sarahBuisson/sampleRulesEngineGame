@@ -33,9 +33,9 @@ pluginManagement {
                 useModule("com.android.tools.build:gradle:${requested.version}")
             }
         }
-println(this.class)
+        println(this.class)
 
-     //   println(this.pluginVersions)
+        //   println(this.pluginVersions)
     }
 
     repositories {

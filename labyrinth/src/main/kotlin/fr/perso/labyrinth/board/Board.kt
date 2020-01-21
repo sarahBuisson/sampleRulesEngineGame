@@ -16,11 +16,10 @@ open class BoardZoneImpl(override val x: Int, override val y: Int) : PointImpl(x
 }
 
 
-
 fun connectZone(
-    oldPosition: BoardZone,
-    newPosition: BoardZone,
-    direction: Direction) {
+        oldPosition: BoardZone,
+        newPosition: BoardZone,
+        direction: Direction) {
     newPosition.connections.put(direction.inv(), oldPosition)
     oldPosition.connections.put(direction, newPosition)
 }
@@ -36,7 +35,7 @@ fun unconnectZone(oldPosition: BoardZone, newPosition: BoardZone) {
 
 class Board<T : Any> {
     lateinit var start: T
-     var exit: T?=null
+    var exit: T? = null
     val width: Int
     val height: Int
 
@@ -66,8 +65,8 @@ class Board<T : Any> {
     fun getNeigbour(p: Point, d: Direction): T? = get(p.x + d.x, p.y + d.y)
     fun getNeigbours(p: Point): List<T> = Direction.values().mapNotNull { this.getNeigbour(p, it) }
     fun getNeigboursMap(p: Point): Map<Direction, T> =
-        Direction.values().associate { Pair(it, this.getNeigbour(p, it)) }.filter { it.value != null }
-            .mapValues { it.value!! }
+            Direction.values().associate { Pair(it, this.getNeigbour(p, it)) }.filter { it.value != null }
+                    .mapValues { it.value!! }
 
     fun toString(toString: (it: T) -> String): String {
         return content.map { "\n" + it.map { it2: T -> " " + toString(it2) } }.toString()
@@ -77,15 +76,16 @@ class Board<T : Any> {
 
 }
 
-interface Point{
-    val x:Int
-    val y:Int
+interface Point {
+    val x: Int
+    val y: Int
 }
-open class PointImpl(override val x: Int, override val y: Int):Point {
+
+open class PointImpl(override val x: Int, override val y: Int) : Point {
 
     fun add(x: Int, y: Int): PointImpl = PointImpl(this.x + x, this.y + y)
     fun add(p2: PointImpl): PointImpl =
-        PointImpl(this.x + p2.x, this.y + p2.y)
+            PointImpl(this.x + p2.x, this.y + p2.y)
 
     override fun toString(): String {
         return "($x, $y)"
@@ -118,10 +118,9 @@ val defaultZoneName: (BoardZone) -> Any? = {
 }
 
 
-
 val defaultDoorName: (Direction, BoardZone) -> Any = { d, zone ->
-val show=zone.connections.containsKey(d)
-   when {
+    val show = zone.connections.containsKey(d)
+    when {
         d == Direction.TOP && show -> "|"
         d == Direction.TOP && !show -> " "
         d == Direction.BOTTOM && show -> "|"
@@ -134,7 +133,7 @@ val show=zone.connections.containsKey(d)
     }
 }
 
-fun <T:BoardZone> labyrinthTreeToString(board: Board<T>, zoneName:(T)->Any?= defaultZoneName, doorName:(Direction, T)->Any?= defaultDoorName): String {
+fun <T : BoardZone> labyrinthTreeToString(board: Board<T>, zoneName: (T) -> Any? = defaultZoneName, doorName: (Direction, T) -> Any? = defaultDoorName): String {
 
 
     var str = "";

@@ -14,12 +14,12 @@ class MoveKillRule : BasicRule<MoveFacts>() {
 
     override fun execute(facts: MoveFacts) {
 
-        facts.position.content!!.events+="kill by "+facts.horse.player.name+" in "+facts.position.name
-        facts.position.content!!.position=null//kill
+        facts.position.content!!.events += "kill by " + facts.horse.player.name + " in " + facts.position.name
+        facts.position.content!!.position = null//kill
 
-        facts.horse.position?.content=null
+        facts.horse.position?.content = null
         facts.position.content = facts.horse
-        facts.horse.position=facts.position
+        facts.horse.position = facts.position
 
     }
 
@@ -33,9 +33,9 @@ class MoveSimpleRule : BasicRule<MoveFacts>() {
 
     override fun execute(facts: MoveFacts) {
 
-        facts.horse.position?.content=null
+        facts.horse.position?.content = null
         facts.position.content = facts.horse
-        facts.horse.position=facts.position
+        facts.horse.position = facts.position
     }
 }
 

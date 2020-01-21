@@ -1,7 +1,7 @@
 import {kotlinProxy} from "../util";
 import labyrinth from 'labyrinth';
 
-export const ACTION_TYPES = {UPDATE_STATE_TYPE: 'UPDATE_STATE', SELECT_OBJECT:'SELECT_OBJECT'}
+export const ACTION_TYPES = {UPDATE_STATE_TYPE: 'UPDATE_STATE', SELECT_OBJECT: 'SELECT_OBJECT'}
 
 export function updateStateAction(statePath, data) {
     return {
@@ -12,7 +12,7 @@ export function updateStateAction(statePath, data) {
 
 export function newPartiePointNClick(size) {
     const newPartie = kotlinProxy(labyrinth.fr.perso.labyrinth.freezone.gameplay, false).initPartieExit(size);
-   console.log(newPartie)
+    console.log(newPartie)
     return updateStateAction('currentPartie', newPartie)
 }
 
@@ -36,12 +36,11 @@ export function selectObj(obj) {
 }
 
 
-
-export function play(partie, obj){
-console.log("play")
-console.log(obj)
-console.log(partie)
-    newPartiePointNClick = kotlinProxy(labyrinth.fr.perso.labyrinth.freezone.gameplay,false).playerInteractWith(partie, obj)
+export function play(partie, obj) {
+    console.log("play")
+    console.log(obj)
+    console.log(partie)
+    newPartiePointNClick = kotlinProxy(labyrinth.fr.perso.labyrinth.freezone.gameplay, false).playerInteractWith(partie, obj)
     console.log("after play")
     console.log(newPartiePointNClick)
     return updateStateAction('currentPartie', newPartiePointNClick)
