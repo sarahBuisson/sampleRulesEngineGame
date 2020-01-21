@@ -43,7 +43,7 @@ buildscript {
     }
 
     apply from: "https://raw.githubusercontent.com/sarahBuisson/easy-rules/master/gradle/util.gradle"
-    
+
 }
 
 plugins {
@@ -65,22 +65,6 @@ repositories {
 }
 
 kotlin {
-    targets {
-        println(presets.getAsMap().keySet())
-        fromPreset(presets.jvm, 'jvm') {
-            compilations.all {
-                tasks[compileKotlinTaskName].kotlinOptions {
-                    jvmTarget = '1.8'
-                }
-            }
-        }
-        fromPreset(presets.js, 'nodeJs') {
-            compilations.all {
-                tasks[compileKotlinTaskName].kotlinOptions {
-                }
-            }
-        }
-    }
     sourceSets {
         commonMain {
             kotlin.srcDir('src/main/kotlin')
@@ -122,7 +106,7 @@ kotlin {
 
             }
         }
-        jvm {
+        jvmMain {
             dependencies {
                 implementation "io.github.microutils:kotlin-logging:$kotlin_logging_version"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -144,19 +128,6 @@ kotlin {
 
         }
 
-        nodeJsMain {
-            dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
-                implementation "io.github.microutils:kotlin-logging-js:$kotlin_logging_version"
-                implementation "org.jeasy:easy-rules-core-js:$rules_version"
-                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.11.1"
-                //implementation "org.jetbrains.kotlin:kotlin-test-js"
-                //  implementation 'io.mockk:mockk:1.7.17'
-            }
-
-        }
-
-
         jsTest {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
@@ -175,37 +146,30 @@ kotlin {
             }
         }
     }
-
     jvm {
         compilations.main.kotlinOptions {
-            // Setup the Kotlin compiler options for the 'main' compilation:
+            // Setup the Kotlin compiler options for the "main" compilation:
             jvmTarget = "1.8"
         }
         mavenPublication {
             artifactId project.name + "-jvm"
         }
-        preparePublishing(it,this)
-
 
     }
     js() {
-        nodejs{}
-       // browser{}
+        browser{}
         mavenPublication {
             artifactId project.name + "-js"
         }
         compilations.main.kotlinOptions {
-            // Setup the Kotlin compiler options for the 'main' compilation:
+            // Setup the Kotlin compiler options for the "main" compilation:
             moduleKind = "umd"
         }
-        configurePublishingWithNPM(it, project.version, configurations,this)
     }
     metadata {
         mavenPublication {
             artifactId project.name + "-common"
         }
-
-        preparePublishing(it,this)
     }
 
 }
