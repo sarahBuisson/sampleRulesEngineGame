@@ -18,20 +18,15 @@ class Partie(val player: Player, val level: List<GeoZone>)
 
 fun initLab(size: Int = 5): Partie {
     val lab = createLab(size)
-    LabFiller<FreeZone>().fillLab(lab, lab.first(), size, 0);
+    LabFiller<FreeZone>()
+            .init(lab, lab.first(), size, 0)
+            .fillLab(lab, lab.first(), size, 0);
     return Partie(Player(lab.first()), lab)
 }
 
 fun initPartie(size: Int = 5): Partie {
     val lab = createLab(size)
     LabFiller<FreeZone>().fillLab(lab, lab.first(), size, size);
-    return Partie(Player(lab.first()), lab)
-}
-
-
-fun initPartieExit(size: Int = 5): Partie {
-    val lab = createLab(size)
-    LabFillerExit<FreeZone>().fillLab(lab, lab.first(), size, size);
     return Partie(Player(lab.first()), lab)
 }
 

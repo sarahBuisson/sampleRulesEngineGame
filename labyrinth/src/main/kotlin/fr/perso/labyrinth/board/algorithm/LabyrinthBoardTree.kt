@@ -1,5 +1,6 @@
 package fr.perso.labyrinth.board.algorithm
 
+import fr.perso.labyrinth.ConnectedZone
 import fr.perso.labyrinth.board.*
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.core.DefaultRulesEngine
@@ -19,7 +20,7 @@ val ruleConnectEndCaseToAFreeNeighboor = LambdaRule<DrawLabCaseFacts<BoardZone>>
             facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size == 0 }
     if (freeNeighboors.isNotEmpty()) {
         val nextNei = freeNeighboors.entries.random();
-        connectZone(facts.zone, nextNei.value!!, nextNei.key)
+        facts.zone.connectZone( nextNei.value!!, nextNei.key)
     }
 
 });
@@ -34,7 +35,7 @@ val ruleAddCrossToAFreeNeighboor = LambdaRule<DrawLabCaseFacts<BoardZone>>({ fac
             facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size == 0 }
     if (freeNeighboors.isNotEmpty()) {
         val nextNei = freeNeighboors.entries.random();
-        connectZone(facts.zone, nextNei.value!!, nextNei.key)
+        facts.zone.connectZone(nextNei.value!!, nextNei.key)
     }
 
 });
@@ -49,7 +50,7 @@ val ruleConnectUnconnectedCaseToAnyConnectedNei = LambdaRule<DrawLabCaseFacts<Bo
             facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size > 0 }
 
     val nextNei = freeNeighboors.entries.random();
-    connectZone(facts.zone, nextNei.value!!, nextNei.key)
+    facts.zone.connectZone( nextNei.value!!, nextNei.key)
 
 });
 
@@ -63,7 +64,7 @@ val ruleConnectUnconnectedCaseToBestConnectedNei = LambdaRule<DrawLabCaseFacts<B
             facts.board.getNeigboursMap(facts.zone).filter { it.value != null }.filter { it.value!!.connections.size > 0 }
     if (freeNeighboors.isNotEmpty()) {
         val nextNei = freeNeighboors.entries.sortedBy { it.value.connections.size }.last();
-        connectZone(facts.zone, nextNei.value!!, nextNei.key)
+       facts.zone.connectZone(nextNei.value!!, nextNei.key)
     }
 
 });
@@ -78,7 +79,7 @@ fun <T : BoardZone> drawLab(board: Board<T>): Board<T> {
 
 
     val firstC = board.getNeigboursMap(board.start).entries.random()
-    connectZone(board.start, firstC.value!!, firstC.key);
+    board.start.connectZone( firstC.value!!, firstC.key);
     var countFreeCase = board.toList().size;
     val rules = Rules(setOf(
             ruleConnectEndCaseToAFreeNeighboor,
@@ -103,7 +104,7 @@ fun <T : BoardZone> drawLab(board: Board<T>): Board<T> {
     return board
 }
 
-fun <T> chooseExit(board: Board<T>)
+fun <T> chooseStartExit(board: Board<T>)
         where T : BoardZone, T : Point {
     val mapDistance = distance(board.start, board)
     board.exit = mapDistance.entries.maxBy { it.value }!!.key
@@ -142,9 +143,9 @@ fun <T : BoardZone> distance(start: Point, board: Board<T>): Map<T, Int> {
     return distance
 }
 
-fun coridorSize(start: Point, board: Board<BoardZone>): Map<BoardZone, Int> {
+fun coridorSizeDistanceMap(board: Board<BoardZone>): Map<BoardZone, Int> {
     val distance = mutableMapOf<BoardZone, Int>()
-    distance.put(board.get(start)!!, 0)
+    //distance.put(board.get(start)!!, 0)
     val zones = board.toList()
     while (distance.size < zones.size) {
 
@@ -174,8 +175,42 @@ fun coridorSize(start: Point, board: Board<BoardZone>): Map<BoardZone, Int> {
     return distance
 }
 
+/*
+* merge two cul de sac corridor connected into one cul de sac
+* */
+fun complexiteMergeCulDeSac(board: Board<BoardZone>) {
+    val coridorSizeDistanceMap = coridorSizeDistanceMap(board)
+    val culDeSac=coridorSizeDistanceMap.filter { it.value==0 }.keys;
 
-fun complexite(start: Point, board: Board<BoardZone>): Map<BoardZone, Int> {
+    culDeSac.shuffled().forEach {
+     val otherCulDeSacs= board.getNeigbours(it).filter { nei->nei.connected.size==1}.plus(it)
+if(otherCulDeSacs.size>1) {
+   val  sortedCulDeSac = otherCulDeSacs.map { culDeSac -> followCorridor(culDeSac) }.sortedBy { it.size }
+
+   val corridorToKeep: Set<ConnectedZone> = sortedCulDeSac[0]
+    val corridorToMerge:Set<ConnectedZone> = sortedCulDeSac[1]
+
+     corridorToKeep.first().connectTo(corridorToMerge.first())
+}
+    }
+
+
+}
+
+fun followCorridor( start:ConnectedZone):Set<ConnectedZone>{
+    val ret= mutableSetOf<ConnectedZone>()
+    var next:ConnectedZone?=start
+    while(next!=null && next.connected.size<=2){
+        ret.add(next)
+        next=start.connected.find { !ret.contains(it) }
+    }
+return ret;
+}
+
+
+
+
+fun complexiteMap(start: Point, board: Board<BoardZone>): Map<BoardZone, Int> {
     val complexite = mutableMapOf<BoardZone, Int>()
     complexite.put(board.get(start)!!, 0)
     while (complexite.size < board.toList().size) {

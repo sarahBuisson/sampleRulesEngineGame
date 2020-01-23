@@ -4,7 +4,11 @@ import fr.perso.labyrinth.freezone.generation.ObjectZone
 
 interface Zone {}
 interface ConnectedZone {
-    val connected: List<ConnectedZone>
+    val connected: List<out ConnectedZone>
+
+    fun connectTo(other: ConnectedZone)
+
+    fun unconnectTo(other: ConnectedZone)
 }
 
 interface NamedZone {

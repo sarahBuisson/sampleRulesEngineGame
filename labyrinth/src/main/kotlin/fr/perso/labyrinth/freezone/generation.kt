@@ -5,6 +5,7 @@ import fr.perso.labyrinth.ConnectedZone
 import fr.perso.labyrinth.GeoZone
 import fr.perso.labyrinth.NamedZone
 import doorWithKeyDefault
+import fr.perso.labyrinth.board.Board
 import objetDiversDefault
 
 /** draw a lab where zone are linked each to another, without notion of x-y*/
@@ -13,14 +14,14 @@ var index = 0;
 
 interface FreeZone : NamedZone, ConnectedZone, GeoZone {
     override val name: String
-    override var connected: MutableList<FreeZone>
+    override var connected: List<out FreeZone>
     override var content: MutableList<ObjectZone>
 }
 
 
 data class FreeZoneImpl(
         override val name: String = "" + (index++),
-        override var connected: MutableList<FreeZone> = mutableListOf<FreeZone>(),
+        override var connected: List<out FreeZone> = mutableListOf(),
         override var content: MutableList<ObjectZone> = mutableListOf<ObjectZone>()
 
 
@@ -28,6 +29,18 @@ data class FreeZoneImpl(
 
     override fun toString(): String {
         return name + "(" + connected.map { it.name } + ")" + content.map { it.name } + ""
+    }
+
+    override fun connectTo(other: ConnectedZone) {
+        other as FreeZone
+        (this.connected as MutableList<FreeZone>).add(other)
+        (other.connected as MutableList<FreeZone>).add(this)
+    }
+
+    override fun unconnectTo(other: ConnectedZone) {
+        other as FreeZone
+        (this.connected as MutableList<FreeZone>).remove(other)
+        (other.connected as MutableList<FreeZone>).remove(this)
     }
 
     override fun hashCode(): Int {
@@ -58,17 +71,13 @@ class ExchangeObjectZone(
 ) : ObjectZone(name)
 
 
-fun linkZone(a: FreeZone, b: FreeZone) {
-    a.connected.add(b)
-    b.connected.add(a)
-}
 
 fun createCorridor(size: Int): List<FreeZone> {
     val corridor = mutableListOf<FreeZone>(FreeZoneImpl())
     for (i in 0..size) {
         val newZone = FreeZoneImpl()
 
-        linkZone(newZone, corridor.last())
+        newZone.connectTo(corridor.last())
         corridor.add(newZone);
 
     }
@@ -85,7 +94,7 @@ fun createLab(size: Int): List<FreeZone> {
                 (1..10).random() > 8
         ) {
             val culDeSac = createCorridor(size)
-            linkZone(culDeSac.first(), it)
+            culDeSac.first().connectTo(it)
             lab.addAll(culDeSac);
         }
     }
@@ -110,52 +119,71 @@ fun distanceToZone(
 }
 
 
-class LabFillerExit<T>(
+open class LabFillerExit<T>(
         keyToDoorArray: Array<Array<String>> = doorWithKeyDefault,
-        objetDiversArray: Array<String> = objetDiversDefault
+        objetDiversArray: Array<String> = objetDiversDefault, val board: Board<T>
 ) :
         LabFiller<T>(keyToDoorArray, objetDiversArray)
         where T : GeoZone, T : ConnectedZone {
 
     fun isCulDeSac(freeZone: ConnectedZone): Boolean {
-        val distance = distanceMap[freeZone]!!
-        return freeZone.connected.all { distanceMap[it]!! < distance }
+        val distance = distanceFromStartMap[freeZone]!!
+        return freeZone.connected.all { distanceFromStartMap[it]!! < distance }
 
     }
 
-    override public fun fillLab(
+    override fun fillLab(
             zones: List<T>, start: T, numberOfDoor: Int, numberOfExchanges: Int
     ) {
-        val culDeSacs = zones.filter { isCulDeSac(it) }.sortedByDescending { distanceMap[it] };
-        val exit = culDeSacs.first()
-        exit.content.add(KeyObjectZone("victoire"))
+        val exit = board.exit
+        exit!!.content.add(KeyObjectZone("victoire"))
 
-        val pathToExit = mutableListOf<T>()
-        var cursor = exit
-        do {
-            cursor = cursor.connected.minBy { distanceMap[it]!! }!! as T
-            pathToExit.add(cursor)
-        } while (distanceMap[cursor]!! > 0)
+        val pathToExit = extractPathFromStartToExit(exit)
+        fillPathWithClosedDoor(pathToExit, listOfKey.subList(0, listOfKey.size / 2))
+        println("pathFilled")
+        fillLabWithDoors(numberOfDoor, zones, listOfKey.subList(listOfKey.size / 2, listOfKey.size))
 
-        for (i in pathToExit.size - 1..0) {
-            val current = pathToExit[i]!!
+
+    }
+
+    private fun fillPathWithClosedDoor(pathToExit: MutableList<T>, listOfKey: MutableList<String>) {
+        val inter = IntRange(1, pathToExit.size - 1).shuffled();
+        for (i in inter) {
+            val currentZone = pathToExit[i]!!
             val lockedZone = pathToExit[i - 1]!!
-            val doorToExit = current.content.filterIsInstance<DoorObjectZone>().find { it.destination == lockedZone }!!
+            println(currentZone)
+            println(lockedZone)
+            val doorToExit = currentZone.content.filterIsInstance<DoorObjectZone>().find { it.destination == lockedZone }
 
-            this.affectKeyToDoor(doorToExit, current)
+
+            if (doorToExit != null) {
+                this.affectKeyToDoor(doorToExit, currentZone, listOfKey)
+            }
+            if (listOfKey.isEmpty())
+                return;
 
         }
-        super.fillLab(zones, start, numberOfDoor, numberOfExchanges)
+
+    }
+
+    private fun extractPathFromStartToExit(exit: T?): MutableList<T> {
+        val pathToExit = mutableListOf<T>()
+        var cursor = exit!!
+        do {
+            cursor = cursor.connected.minBy { distanceFromStartMap[it]!! }!! as T
+            pathToExit.add(cursor)
+        } while (distanceFromStartMap[cursor]!! > 0)
+        return pathToExit
     }
 
 }
 
 
-open class LabFiller<T>
-        where T : GeoZone, T : ConnectedZone {
+open class LabFiller<TZone>
+        where TZone : GeoZone, TZone : ConnectedZone {
 
-    lateinit var distanceMap: Map<ConnectedZone, Int>
-    lateinit var begin: T
+    lateinit var distanceFromStartMap: Map<ConnectedZone, Int>
+    lateinit var begin: TZone
     var keyToDoor: MutableList<Pair<String, String>>;
     var objetDivers: MutableList<String>;
     var listOfKey: MutableList<String>;
@@ -170,11 +198,10 @@ open class LabFiller<T>
     }
 
 
-    open public fun fillLab(
-            zones: List<T>, begin: T = zones.first(), numberOfDoor: Int, numberOfExchanges: Int
-    ) {
+    open public fun init(zones: List<TZone>, begin: TZone = zones.first(), numberOfDoor: Int, numberOfExchanges: Int): LabFiller<TZone> {
 
-        distanceMap = distanceToZone(begin);
+        this.begin = begin
+        distanceFromStartMap = distanceToZone(begin);
 
         zones.forEach { zone ->
             zone.connected.forEach {
@@ -182,46 +209,35 @@ open class LabFiller<T>
                 zone.content.add(DoorObjectZone(it));
             }
         }
+        return this;
+    }
+
+    open public fun fillLab(
+            zones: List<TZone>, begin: TZone = zones.first(), numberOfDoor: Int, numberOfExchanges: Int
+    ) {
 
 
-        for (i in 1..numberOfDoor) {
 
-
-            lateinit var availableZoneForKey: Set<T>;
-            lateinit var zoneWhoWillBeClosedByDoorAndKey: T;
-            lateinit var doorZone: T;
-            lateinit var zonesAfterDoorZone: List<T>;
-
-
-            //Select a zone when you can put a door.
-            do {
-                doorZone = zones.random()
-                val distanceMax = distanceMap[doorZone]!!
-                zonesAfterDoorZone = doorZone.connected.filter { distanceMap[it]!! > distanceMax } as List<T>
-            } while (zonesAfterDoorZone.isEmpty())
-
-            val distanceMax = distanceMap[doorZone]!!;
-            zoneWhoWillBeClosedByDoorAndKey = zonesAfterDoorZone.random()
-            val door =
-                    doorZone.content.find { it is DoorObjectZone && it.destination == zoneWhoWillBeClosedByDoorAndKey } as DoorObjectZone
-
-            affectKeyToDoor(
-                    door, doorZone
-
-            )
-        }
+        this.init(zones,begin,numberOfDoor,numberOfExchanges);
+        fillLabWithDoors(numberOfDoor, zones, this.listOfKey)
 
         //And now the exchanges
 
-        for (i in 0..numberOfExchanges) {
+        fillLabWithExchanges(numberOfExchanges, zones)
+
+
+    }
+
+    private fun fillLabWithExchanges(numberOfExchanges: Int, zones: List<TZone>) {
+        for (i in 1..numberOfExchanges) {
             val zoneWithKey = zones.filter { it.content.any { it is KeyObjectZone } }.random()
             val keyToExchange = zoneWithKey.content.filter { it is KeyObjectZone }.random()
-            val distanceMax = distanceMap[zoneWithKey]!!
-            val zonesAvailable = zones.filter { distanceMap[it]!! <= distanceMax }
+            val distanceMax = distanceFromStartMap[zoneWithKey]!!
+            val zonesAvailable = zones.filter { distanceFromStartMap[it]!! <= distanceMax }
 
             val zoneOfNewObject = zonesAvailable.random();
 
-            val newObjectToExchange = generateKey()
+            val newObjectToExchange = generateKey(this.listOfKey)
             val exchanger = ExchangeObjectZone(want = newObjectToExchange, give = keyToExchange)
             zoneWithKey.content.remove(keyToExchange);
             zoneWithKey.content.add(exchanger);
@@ -229,24 +245,68 @@ open class LabFiller<T>
 
 
         }
+    }
+
+    protected fun fillLabWithDoors(numberOfDoor: Int, zones: List<TZone>, listOfKey: MutableList<String>) {
+        for (i in 1..numberOfDoor) {
+            if (listOfKey.isEmpty())
+                return
+
+            lateinit var zoneWhoWillBeClosedByDoorAndKey: TZone;
+            lateinit var doorZone: TZone;
+            lateinit var zonesAfterDoorZone: List<TZone>;
 
 
+            //Select a zone when you can put a door.
+            do {
+                doorZone = zones.filter { isZoneAvailable(it) }.random()
+                val distanceMax = distanceFromStartMap[doorZone]!!
+                zonesAfterDoorZone = doorZone.connected.filter { distanceFromStartMap[it]!! > distanceMax && isZoneAvailable(it as TZone) } as List<TZone>
+            } while (zonesAfterDoorZone.isEmpty() && !zones.filter { isZoneAvailable(it) }.isEmpty())
+
+            val distanceMax = distanceFromStartMap[doorZone]!!;
+            zoneWhoWillBeClosedByDoorAndKey = zonesAfterDoorZone.random()
+            val door =
+                    doorZone
+                            .content
+                            .find { it is DoorObjectZone && it.destination == zoneWhoWillBeClosedByDoorAndKey } as DoorObjectZone
+
+            affectKeyToDoor(
+                    door, doorZone, listOfKey
+            )
+        }
     }
 
 
     protected fun affectKeyToDoor(
             door: DoorObjectZone,
-            doorZone: T
+            doorZone: TZone,
+            listOfKey: MutableList<String>
     ) {
-        val distanceMax = distanceMap[doorZone]!!
-        val availableZoneForKey = distanceMap.filterValues { it <= distanceMax }.keys
-        val keyZone = availableZoneForKey.random() as GeoZone;
+        val availableZoneForKey = availableZonesToPutKeyToAccessZone(doorZone)
+        if (!availableZoneForKey.isEmpty()) {
+            val keyZone = availableZoneForKey.random() as GeoZone;
 
-        val key = generateKey()
+            val key = generateKey(listOfKey)
 
-        affectKeyToDoor(door, key)
+            affectKeyToDoor(door, key)
 
-        keyZone.content.add(key)
+            keyZone.content.add(key)
+            println("key ${key.name} hide $keyZone  to open $doorZone")
+        }
+    }
+
+    open protected fun availableZonesToPutKeyToAccessZone(doorZone: TZone): Collection<TZone> {
+        val distanceMax = distanceFromStartMap[doorZone]!!
+        val availableZoneForKey = distanceFromStartMap.filter {
+            it.value <= distanceMax && isZoneAvailable(it.key as TZone)
+                    && !doorZone.connected.contains(it.key) && doorZone != it.key
+        }.keys
+        return availableZoneForKey as Set<TZone>
+    }
+
+    open protected fun isZoneAvailable(it: TZone): Boolean {
+        return true
     }
 
     protected fun affectKeyToDoor(
@@ -259,11 +319,31 @@ open class LabFiller<T>
     }
 
 
-    private fun generateKey(
+    private fun generateKey(listOfKey: MutableList<String>
     ): KeyObjectZone {
         val name = listOfKey.random()
         listOfKey.remove(name)
         return KeyObjectZone(name)
     }
+
+}
+
+class LabFillerMapLab<T>(
+        keyToDoorArray: Array<Array<String>> = doorWithKeyDefault,
+        objetDiversArray: Array<String> = objetDiversDefault, board: Board<T>
+) : LabFillerExit<T>(keyToDoorArray, objetDiversArray, board)
+        where T : GeoZone, T : ConnectedZone {
+
+
+    override fun isZoneAvailable(it: T): Boolean {
+
+
+        var zoneEmpty = it.content.filterIsInstance<KeyObjectZone>().isEmpty()
+                && it.content.filterIsInstance<DoorObjectZone>().filter { it.key != null }.isEmpty()
+                && this.begin != it
+
+        return zoneEmpty;
+    }
+
 
 }

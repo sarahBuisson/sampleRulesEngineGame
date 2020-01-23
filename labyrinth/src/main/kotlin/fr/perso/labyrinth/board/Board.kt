@@ -4,31 +4,48 @@ import fr.perso.labyrinth.ConnectedZone
 
 
 interface BoardZone : ConnectedZone, Point {
-    val connections: MutableMap<Direction, BoardZone>
+    val connections: Map<Direction, out BoardZone>
+    fun directionOf(newPosition: BoardZoneImpl): Direction
+    fun connectZone(newPosition: BoardZone, direction: Direction)
 }
 
 open class BoardZoneImpl(override val x: Int, override val y: Int) : PointImpl(x, y), BoardZone, ConnectedZone {
-    override val connections = mutableMapOf<Direction, BoardZone>()
-    override val connected: List<ConnectedZone>
-        get() = connections.values.toList()
+    override val connections: Map<Direction, BoardZoneImpl> = mutableMapOf<Direction, BoardZoneImpl>()
+
+    override val connected: List<BoardZoneImpl> = mutableListOf<BoardZoneImpl>()
 
 
-}
+    override fun connectTo(other: ConnectedZone) {
+        other as BoardZoneImpl
+        val direction = directionOf(other)
+        connectZone(other as BoardZoneImpl, direction)
+    }
+
+    override fun unconnectTo(newPosition: ConnectedZone) {
+        newPosition as BoardZoneImpl
+        val direction = directionOf(newPosition)
+        (newPosition.connections as MutableMap<Direction, BoardZone>).remove(direction)
+        (this.connections as MutableMap<Direction, BoardZone>).remove(direction.inv())
+        (newPosition.connected as MutableList).remove(this)
+        (this.connected as MutableList).remove(newPosition)
+    }
+
+    override fun directionOf(newPosition: BoardZoneImpl): Direction {
+        val direction = newPosition.connections.filterValues { it == this }.keys.first();
+        return direction
+    }
 
 
-fun connectZone(
-        oldPosition: BoardZone,
-        newPosition: BoardZone,
-        direction: Direction) {
-    newPosition.connections.put(direction.inv(), oldPosition)
-    oldPosition.connections.put(direction, newPosition)
-}
+    override fun connectZone(
 
+            newPosition: BoardZone,
+            direction: Direction) {
+        (newPosition.connections as MutableMap<Direction, BoardZone>).put(direction.inv(), this)
+        (this.connections as MutableMap<Direction, BoardZone>).put(direction, newPosition)
+        (this.connected as MutableList<BoardZone>).add(newPosition)
+        (newPosition.connected as MutableList<BoardZone>).add(this)
+    }
 
-fun unconnectZone(oldPosition: BoardZone, newPosition: BoardZone) {
-    val direction = newPosition.connections.filterValues { it == oldPosition }.keys.first();
-    newPosition.connections.remove(direction)
-    oldPosition.connections.remove(direction.inv())
 
 }
 
@@ -125,20 +142,21 @@ val defaultDoorName: (Direction, BoardZone) -> Any = { d, zone ->
         d == Direction.TOP && !show -> " "
         d == Direction.BOTTOM && show -> "|"
         d == Direction.BOTTOM && !show -> " "
-        d == Direction.LEFT && show -> '-'
-        d == Direction.LEFT && !show -> ' '
-        d == Direction.RIGHT && show -> '-'
-        d == Direction.RIGHT && !show -> ' '
+        d == Direction.LEFT && show -> "-"
+        d == Direction.LEFT && !show -> " "
+        d == Direction.RIGHT && show -> "-"
+        d == Direction.RIGHT && !show -> " "
         else -> '?'
     }
 }
 
 fun <T : BoardZone> labyrinthTreeToString(board: Board<T>, zoneName: (T) -> Any? = defaultZoneName, doorName: (Direction, T) -> Any? = defaultDoorName): String {
+    val start = "$"
+    val exit = "€"
 
+    var str = "start: $start exit: $exit /n"
 
-    var str = "";
-
-    str = board.content.map {
+    str += board.content.map {
 
 
         val horizontal: String = it.map { zone ->
@@ -147,9 +165,11 @@ fun <T : BoardZone> labyrinthTreeToString(board: Board<T>, zoneName: (T) -> Any?
             r += doorName(Direction.LEFT, zone)
 
             if (zone == board.start) {
-                r += "@"
+
+                r += start
             } else if (zone == board.exit) {
-                r += "€"
+
+                r += exit
             } else {
                 r += zoneName(zone)
             }
