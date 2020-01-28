@@ -1,6 +1,6 @@
 package fr.perso.labyrinth
 
-import fr.perso.labyrinth.freezone.generation.ObjectZone
+import fr.perso.labyrinth.freezone.model.ObjectZone
 
 interface Zone {}
 interface ConnectedZone {

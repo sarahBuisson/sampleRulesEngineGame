@@ -10,6 +10,7 @@ import fr.perso.labyrinth.board.algorithm.drawLab
 import fr.perso.labyrinth.freezone.gameplay.Partie
 import fr.perso.labyrinth.freezone.gameplay.Player
 import fr.perso.labyrinth.freezone.generation.*
+import fr.perso.labyrinth.freezone.model.ObjectZone
 
 class CompositeZone(x: Int, y: Int) : GeoZone, ConnectedZone, BoardZone, BoardZoneImpl(x, y) {
 

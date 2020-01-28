@@ -2,6 +2,7 @@ package fr.perso.labyrinth.freezone.gameplay
 
 import fr.perso.labyrinth.GeoZone
 import fr.perso.labyrinth.freezone.generation.*
+import fr.perso.labyrinth.freezone.model.*
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.core.LambdaRule
@@ -37,7 +38,7 @@ class Interaction<Qui, Quoi, Comment, Univers>(val qui: Qui, val quoi: Quoi, val
 class MoveRule :
         LambdaRule<Interaction<Player, Any, Any, Partie>>(
                 { interaction ->
-                    interaction.quoi is DoorObjectZone && interaction.quoi.key == null
+                    interaction.quoi is DoorObjectZone && interaction.quoi.key == null && interaction.qui.location.content.contains(interaction.quoi)
                 },
                 { interaction ->
                     interaction.qui.location = (interaction.quoi as DoorObjectZone).destination as GeoZone
@@ -47,11 +48,11 @@ class MoveRule :
 class MoveClosedDoorRule :
         LambdaRule<Interaction<Player, Any, Any, Partie>>(
                 { interaction ->
-                    interaction.quoi is DoorObjectZone && interaction.quoi.key != null
+                    MoveRule::evaluate.call(interaction)
                             && interaction.qui.inventory.contains((interaction.quoi as DoorObjectZone).key)
                 },
                 { interaction ->
-                    interaction.qui.location = (interaction.quoi as DoorObjectZone).destination as GeoZone
+                    MoveRule::execute.call(interaction)
                 })
 
 

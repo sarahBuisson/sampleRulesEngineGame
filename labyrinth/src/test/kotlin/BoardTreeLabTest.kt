@@ -3,8 +3,9 @@ import fr.perso.labyrinth.board.algorithm.*
 import fr.perso.labyrinth.board.algorithm.composite.CompositeZone
 import fr.perso.labyrinth.board.algorithm.composite.generateComposite
 import fr.perso.labyrinth.board.algorithm.composite.generateCompositeMapLabWithKey
-import fr.perso.labyrinth.freezone.generation.DoorObjectZone
-import fr.perso.labyrinth.freezone.generation.KeyObjectZone
+import fr.perso.labyrinth.freezone.model.DoorObjectZone
+import fr.perso.labyrinth.freezone.model.KeyObjectZone
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 
 class BoardTreeLabTest {
@@ -124,6 +125,25 @@ class BoardTreeLabTest {
                         compositeDoorName
                 )
         )
+    }
+
+
+
+    @Test
+    fun should_follow_corridor(){
+
+        val factory = { x: Int, y: Int, b: Board<CompositeZone> ->
+            CompositeZone(
+                    x,
+                    y
+            )
+        }
+        val board = Board<CompositeZone>(
+                10, 1, factory
+        )
+        drawLab(board)
+        println(board)
+        assertEquals(followCorridor(board.get(0,0)!!).size,10)
     }
 
 }

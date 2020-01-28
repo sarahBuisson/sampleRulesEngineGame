@@ -3,120 +3,14 @@ package fr.perso.labyrinth.freezone.generation
 
 import fr.perso.labyrinth.ConnectedZone
 import fr.perso.labyrinth.GeoZone
-import fr.perso.labyrinth.NamedZone
 import doorWithKeyDefault
 import fr.perso.labyrinth.board.Board
+import fr.perso.labyrinth.freezone.model.DoorObjectZone
+import fr.perso.labyrinth.freezone.model.ExchangeObjectZone
+import fr.perso.labyrinth.freezone.model.KeyObjectZone
 import objetDiversDefault
 
 /** draw a lab where zone are linked each to another, without notion of x-y*/
-var index = 0;
-
-
-interface FreeZone : NamedZone, ConnectedZone, GeoZone {
-    override val name: String
-    override var connected: List<out FreeZone>
-    override var content: MutableList<ObjectZone>
-}
-
-
-data class FreeZoneImpl(
-        override val name: String = "" + (index++),
-        override var connected: List<out FreeZone> = mutableListOf(),
-        override var content: MutableList<ObjectZone> = mutableListOf<ObjectZone>()
-
-
-) : FreeZone {
-
-    override fun toString(): String {
-        return name + "(" + connected.map { it.name } + ")" + content.map { it.name } + ""
-    }
-
-    override fun connectTo(other: ConnectedZone) {
-        other as FreeZone
-        (this.connected as MutableList<FreeZone>).add(other)
-        (other.connected as MutableList<FreeZone>).add(this)
-    }
-
-    override fun unconnectTo(other: ConnectedZone) {
-        other as FreeZone
-        (this.connected as MutableList<FreeZone>).remove(other)
-        (other.connected as MutableList<FreeZone>).remove(this)
-    }
-
-    override fun hashCode(): Int {
-        return name.hashCode()
-    }
-
-}
-
-
-open class ObjectZone(open var name: String) {
-    override fun hashCode(): Int {
-        return name.hashCode()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (other is ObjectZone)
-            return name.equals(other.name)
-        return false
-    }
-}
-
-class DoorObjectZone(val destination: ConnectedZone, var key: ObjectZone? = null) : ObjectZone("door")
-class KeyObjectZone(override var name: String) : ObjectZone(name)
-class ExchangeObjectZone(
-        var want: ObjectZone,
-        var give: ObjectZone,
-        override var name: String = " exchange donne ${give.name} contre ${want.name}"
-) : ObjectZone(name)
-
-
-
-fun createCorridor(size: Int): List<FreeZone> {
-    val corridor = mutableListOf<FreeZone>(FreeZoneImpl())
-    for (i in 0..size) {
-        val newZone = FreeZoneImpl()
-
-        newZone.connectTo(corridor.last())
-        corridor.add(newZone);
-
-    }
-    return corridor
-}
-
-fun createLab(size: Int): List<FreeZone> {
-    val lab = mutableListOf<FreeZone>()
-    val solution = createCorridor(size);
-    lab.addAll(solution)
-
-    lab.toList().forEach { it ->
-        if (it.connected.size < 4 &&
-                (1..10).random() > 8
-        ) {
-            val culDeSac = createCorridor(size)
-            culDeSac.first().connectTo(it)
-            lab.addAll(culDeSac);
-        }
-    }
-    return lab
-}
-
-
-fun distanceToZone(
-        origin: ConnectedZone,
-        count: MutableMap<ConnectedZone, Int> = mutableMapOf<ConnectedZone, Int>(Pair(origin, 0))
-): MutableMap<ConnectedZone, Int> {
-    if (count[origin] == null) {
-        val min: Int = origin.connected.map { count[it] }.filterNotNull().min() ?: 0
-        count.put(origin, min + 1)
-    }
-    origin.connected.forEach { connected ->
-        if (!count.containsKey(connected)) {
-            distanceToZone(connected, count)
-        }
-    }
-    return count;
-}
 
 
 open class LabFillerExit<T>(
@@ -217,8 +111,7 @@ open class LabFiller<TZone>
     ) {
 
 
-
-        this.init(zones,begin,numberOfDoor,numberOfExchanges);
+        this.init(zones, begin, numberOfDoor, numberOfExchanges);
         fillLabWithDoors(numberOfDoor, zones, this.listOfKey)
 
         //And now the exchanges

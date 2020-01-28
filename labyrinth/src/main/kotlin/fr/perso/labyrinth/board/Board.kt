@@ -24,14 +24,15 @@ open class BoardZoneImpl(override val x: Int, override val y: Int) : PointImpl(x
     override fun unconnectTo(newPosition: ConnectedZone) {
         newPosition as BoardZoneImpl
         val direction = directionOf(newPosition)
-        (newPosition.connections as MutableMap<Direction, BoardZone>).remove(direction)
-        (this.connections as MutableMap<Direction, BoardZone>).remove(direction.inv())
+        (newPosition.connections as MutableMap<Direction, BoardZone>).remove(direction.inv())
+        (this.connections as MutableMap<Direction, BoardZone>).remove(direction)
         (newPosition.connected as MutableList).remove(this)
         (this.connected as MutableList).remove(newPosition)
     }
 
     override fun directionOf(newPosition: BoardZoneImpl): Direction {
-        val direction = newPosition.connections.filterValues { it == this }.keys.first();
+        val direction = Direction.of(newPosition.x - this.x, newPosition.y - this.y)!!
+
         return direction
     }
 
@@ -61,9 +62,9 @@ class Board<T : Any> {
     constructor(width: Int, height: Int, factory: (x: Int, y: Int, board: Board<T>) -> T) {
         this.width = width
         this.height = height
-        for (y in 0..height) {
+        for (y in 0..height-1) {
             content.add(mutableListOf())
-            for (x in 0..width) {
+            for (x in 0..width-1) {
 
                 content.get(y).add(factory(x, y, this))
 
@@ -73,7 +74,7 @@ class Board<T : Any> {
 
 
     fun get(x: Int, y: Int): T? {
-        if (x in 0..width && y in 0..height) return content.get(y)?.get(x) else return null
+        if (x in 0..width-1 && y in 0..height-1) return content.get(y)?.get(x) else return null
     }
 
     fun get(p: Point): T? = get(p.x, p.y)
@@ -124,6 +125,13 @@ enum class Direction(val x: Int, val y: Int) {
         BOTTOM -> TOP
 
     }
+
+    companion object {
+        public fun of(x: Int, y: Int): Direction? {
+            return values().find { it.x == x && it.y == y }
+        }
+    }
+
 }
 
 

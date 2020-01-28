@@ -1,6 +1,6 @@
 import fr.perso.labyrinth.freezone.gameplay.initPartie
 import fr.perso.labyrinth.freezone.gameplay.playerInteractWith
-import fr.perso.labyrinth.freezone.generation.FreeZone
+import fr.perso.labyrinth.freezone.model.FreeZone
 import fr.perso.labyrinth.freezone.generation.LabFiller
 import fr.perso.labyrinth.freezone.generation.createCorridor
 import fr.perso.labyrinth.freezone.generation.createLab
