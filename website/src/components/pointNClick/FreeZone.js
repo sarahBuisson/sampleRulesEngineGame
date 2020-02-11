@@ -5,12 +5,15 @@ import styles from "./styles";
 export class FreeZoneComponent extends Component {
 
 
+    clickOnObj(obj){
+        console.log("clickOnObj")
+        this.props.clickOnObj(obj)
+    }
+
     renderObject(it) {
 
 
         let styleObj = {};
-        console.log(it);
-
         if (it.destination) {
             styleObj = {...styles.objectInZone, ...styles.doorInZone};
         } else if (it.want) {
@@ -18,7 +21,7 @@ export class FreeZoneComponent extends Component {
         } else {
             styleObj = {...styles.objectInZone, ...styles.keyInZone};
         }
-        return <div onClick={() => this.props.clickOnObj(it)}
+        return <div onClick={() => this.clickOnObj(it)}
                     style={styleObj}
 
         >{it.name} {it.destination && it.destination.name}</div>;

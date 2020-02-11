@@ -40,12 +40,12 @@ export class MapNew extends React.Component {
 
         //Initializing force simulation
         const simulation = d3.forceSimulation()
-            .force('link', d3.forceLink())
+            .force('link', d3.forceLink().distance(150))
             .force('charge', d3.forceManyBody())
             .force('collide', d3.forceCollide())
             .force('center', d3.forceCenter(width / 2, height / 2))
-            .force("y", d3.forceY(0))
-            .force("x", d3.forceX(0));
+            .force("y", d3.forceY(10))
+            .force("x", d3.forceX(10));
 
 
         //Drag functions
@@ -75,13 +75,19 @@ export class MapNew extends React.Component {
             .attr("stroke","blue");
 
         //Creating nodes
-        const node = d3.select('.chartContainer')
-            .selectAll('div')
+        const node = chart.append('g')
+            .attr('class', 'nodes')
+            .selectAll('g')
             .data(zonesData).enter()
-            .append('div')
-            .style("position", "absolute")
-            .text((it) => "zone" + it.name)
-            .call(d3.drag()
+            .append("g");
+
+            node.append('circle')
+                .attr("r",20+10* Math.random())
+                .attr("cx",20)
+                .attr("fill","grey")
+
+
+            node.call(d3.drag()
                 .on('start', dragStart)
                 .on('drag', drag)
                 .on('end', dragEnd)
@@ -95,7 +101,7 @@ export class MapNew extends React.Component {
                     .style('left', '0px')
                     .style('top', '0px');
             });
-
+        node.append("text").text((it) => "zone" + it.name)
         //Setting location when ticked
         const ticked = () => {
             link
@@ -113,9 +119,8 @@ export class MapNew extends React.Component {
                 });
 
             node
-                .attr("style", d => {
-                    return 'position: absolute; left: ' + d.x + 'px; top: ' + (d.y + 72) + 'px';
-                });
+
+                .attr("transform",  d => {return `translate(${d.x} ${d.y} )`});
         };
 
         //Starting simulation

@@ -8,12 +8,12 @@ import {bindActionCreators} from "redux";
 import {newLab, newPartiePointNClick, play, selectObj} from '../../services/actions'
 import styles from './styles.js'
 import {MapComponent} from "./map";
+import {MapNew} from "./mapNew";
 
 class PointNClickApp extends Component {
 
-    constructor() {
-        super();
-        this.props = {};
+    constructor(props={}) {
+        super(props);
         this.state = {};
 
     }
@@ -22,18 +22,19 @@ class PointNClickApp extends Component {
         this.props.newPartie(6);
     };
 
-    newLab() {
+    newLab(){
         this.props.newLab(6);
     };
 
     selectObj(obj) {
-        console.log("select")
         this.props.selectObj(obj);
     };
 
 
     clickOnObj(obj) {
-
+console.log("pnc")
+        console.log(obj)
+        console.log(this.props.currentPartie)
         this.props.play(this.props.currentPartie, obj)
     };
 
@@ -44,7 +45,7 @@ class PointNClickApp extends Component {
         return <div>
 
             <div>
-                <FreeZone freeZone={partieJs.player.location} partie={partie} clickOnObj={this.clickOnObj}/>
+                <FreeZone freeZone={partieJs.player.location} partie={partie} clickOnObj={(partie,obj)=>this.clickOnObj(partie,obj)}/>
             </div>
             <div>
                 selected: {playerJs.selected ? playerJs.selected.name : ''}
@@ -56,7 +57,7 @@ class PointNClickApp extends Component {
                     return <div style={styles.objectInInventory} onClick={() => this.selectObj(it)}>{it.name}</div>
                 })}</div>
             <div>
-                <MapComponent zones={partieJs.levelArray}/>
+                <MapNew zones={partieJs.levelArray}/>
             </div>
         </div>
     };
@@ -70,7 +71,6 @@ class PointNClickApp extends Component {
             console.log(partie)
             content = this.renderPartie(partie)
         } else {
-
             content = "no partie loaded";
         }
         return <div>
@@ -78,8 +78,8 @@ class PointNClickApp extends Component {
             {content}
             <br/>
 
-            <button onClick={this.newLab}>new Lab</button>
-            <button onClick={this.newGame}>new Partie</button>
+            <button onClick={this.newLab.bind(this)}>new Lab</button>
+            <button onClick={this.newGame.bind(this)}>new Partie</button>
         </div>
 
         /*
@@ -97,7 +97,7 @@ function mapStateToProps(state, ownProps) {
 
     return {
         ...ownProps,
-        currentPartie: this.state.currentPartie
+        currentPartie: state.currentPartie
     }
 }
 
