@@ -5,6 +5,7 @@ import ResolvePartialSudokyGrid
 import fr.perso.initPossibleValues
 import generateCleanedSudoku
 import generateFullSudoku
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -88,7 +89,7 @@ class SudokuGridGenerateTest {
         println("resolvedGrid")
         println(resolved)
     }
-
+@Ignore
     @Test
     fun shouldGenerateAndCleanFull33Difficulty9() {
 

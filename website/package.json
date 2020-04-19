@@ -35,7 +35,7 @@
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.3.1",
     "webpack-node-externals": "^1.7.2",
-    "install-jar-dependency": ""
+    "install-jar-dependency": "0.0.4"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.4",
@@ -60,13 +60,19 @@
   "mavenDependencies": {
     "kotlin-logging": "io.github.microutils:kotlin-logging-js:1.6.22",
     "kotlin-stdlib-js": "org.jetbrains.kotlin:kotlin-stdlib-js:1.3.61",
-    "kotlinx-serialization-kotlinx-serialization-runtime": "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.11.1"
+    "kotlinx-serialization-kotlinx-serialization-runtime": "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0",
+    "easy-rules-core": "org.jeasy:easy-rules-core-npm:3.2.4-snapshot",
+    "easy-rules-kotlin-easy-rules-core": "org.jeasy:easy-rules-core-npm:3.2.4-snapshot"
   },
   "jarDependencies": {
-    "easy-rules-core": "/Users/sarahbuisson/.m2/repository/org/jeasy/easy-rules-core-js/3.2.4/easy-rules-core-js-3.2.4.jar",
-    "easy-rules-kotlin-easy-rules-core": "/Users/sarahbuisson/.m2/repository/org/jeasy/easy-rules-core-js/3.2.4/easy-rules-core-js-3.2.4.jar",
     "sudoku": "../sudokuRules/build/libs/sudokuRules-js-1.0-SNAPSHOT.jar",
     "labyrinth": "../labyrinth/build/libs/labyrinth-js-1.0-SNAPSHOT.jar"
   },
+  "mavenRepositories": [
+    "https://kotlin.bintray.com/kotlinx/",
+    "https://kotlin.bintray.com/kotlinx/",
+    "https://dl.bintray.com/kotlin/kotlinx/",
+    "packagecloud+https://packagecloud.io/sarahBuisson/sarahbuisson"
+  ],
   "description": ""
 }

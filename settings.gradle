@@ -39,11 +39,14 @@ pluginManagement {
     }
 
     repositories {
+        maven {
+            url "https://packagecloud.io/sarahBuisson/sarahbuisson/maven2"
+        }
         google()
         jcenter()
         mavenLocal()
         maven {
-            url = 'http://repo.maven.apache.org/maven2'
+            url = 'https://repo.maven.apache.org/maven2'
         }
         google()
         gradlePluginPortal()
@@ -67,6 +70,8 @@ pluginManagement {
 
     }
 }
+
+
 println("setting")
 rootProject.name = 'multiGameSample'
 include(':sudokuRules')
