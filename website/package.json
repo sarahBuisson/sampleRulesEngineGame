@@ -8,7 +8,7 @@
     "build": "npm run buildClient",
     "buildClient": "webpack --mode production --config webpack.config.js",
     "test": "jest --coverage",
-    "postinstall": "npx install-jar-dependency"
+    "postinstall": "npx install-jar-dependency package.json"
   },
   "keywords": [],
   "author": "",
@@ -35,7 +35,7 @@
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.3.1",
     "webpack-node-externals": "^1.7.2",
-    "install-jar-dependency": "0.0.4"
+    "install-jar-dependency": "/Users/sarahbuisson/dev/workspace-drsa/install-jar-dependency"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.4",
@@ -46,7 +46,7 @@
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
-    "kotlin": "1.3.40",
+    "kotlin": "1.3.70",
     "lodash": "^4.17.15",
     "react-redux": "^7.0.3",
     "react-router-dom": "^5.0.0",
@@ -59,14 +59,15 @@
   },
   "mavenDependencies": {
     "kotlin-logging": "io.github.microutils:kotlin-logging-js:1.6.22",
-    "kotlin-stdlib-js": "org.jetbrains.kotlin:kotlin-stdlib-js:1.3.61",
+    "kotlin-stdlib": "org.jetbrains.kotlin:kotlin-stdlib-js:1.3.70",
+    "kotlin-stdlib-js": "org.jetbrains.kotlin:kotlin-stdlib-js:1.3.70",
     "kotlinx-serialization-kotlinx-serialization-runtime": "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0",
     "easy-rules-core": "org.jeasy:easy-rules-core-npm:3.2.4-snapshot",
     "easy-rules-kotlin-easy-rules-core": "org.jeasy:easy-rules-core-npm:3.2.4-snapshot"
   },
   "jarDependencies": {
-    "sudoku": "../sudokuRules/build/libs/sudokuRules-js-1.0-SNAPSHOT.jar",
-    "labyrinth": "../labyrinth/build/libs/labyrinth-js-1.0-SNAPSHOT.jar"
+    "sudoku": "../sudokuRules/build/libs/sudokuRules-npm-1.0.0-SNAPSHOT.jar",
+    "labyrinth": "../labyrinth/build/libs/labyrinth-npm-1.0.0-SNAPSHOT.jar"
   },
   "mavenRepositories": [
     "https://kotlin.bintray.com/kotlinx/",

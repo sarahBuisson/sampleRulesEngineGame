@@ -39,12 +39,12 @@ pluginManagement {
     }
 
     repositories {
+        mavenLocal()
         maven {
             url "https://packagecloud.io/sarahBuisson/sarahbuisson/maven2"
         }
         google()
         jcenter()
-        mavenLocal()
         maven {
             url = 'https://repo.maven.apache.org/maven2'
         }
@@ -77,3 +77,4 @@ rootProject.name = 'multiGameSample'
 include(':sudokuRules')
 include(':labyrinth')
 include(':littleHorses')
+include(':website')

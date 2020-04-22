@@ -5,31 +5,24 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.3.40'
+        kotlin_version = '1.3.70'
         kotlin_logging_version = "1.6.22"
         coroutines_version ="0.23.3"
-        koltinxSerializationVersion = "0.11.1"
+        koltinxSerializationVersion = "0.20.0"
         rules_version ="3.2.4-SNAPSHOT"
         mockkVersion = "1.9"
     }
-    dependencies {
-        // classpath 'io.github. microutils:kotlin-logging:1.6.22'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-//
-        classpath "org.jeasy:easy-rules-core-jvm:$rules_version"
-        classpath "org.jeasy:easy-rules-core-js:$rules_version"
-        classpath "org.jeasy:easy-rules-core-common:$rules_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-        classpath "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$koltinxSerializationVersion"
-        classpath "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$koltinxSerializationVersion"
-        classpath "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$koltinxSerializationVersion"
+    repositories {
+        mavenLocal()
+        maven {url ="https://packagecloud.io/sarahBuisson/sarahbuisson/maven2"}
+        google()
+        jcenter()
 
     }
 
 }
 
-plugins { id 'org.jetbrains.kotlin.multiplatform' version '1.3.40' }
+plugins { id 'org.jetbrains.kotlin.multiplatform' version '1.3.70' }
 
 repositories {
     maven { url "https://packagecloud.io/sarahBuisson/sarahbuisson/maven2" }
@@ -40,18 +33,20 @@ repositories {
 allprojects {
 
     group = 'fr.perso'
-    version = '1.0-SNAPSHOT'
+    version = '1.0.0-SNAPSHOT'
+    repositories {
+        mavenLocal()
+        maven {url ="https://packagecloud.io/sarahBuisson/sarahbuisson/maven2"}
+        google()
+        jcenter()
+
+    }
+
 }
 
 subprojects {
     project ->
-        project.repositories {
-            maven {
-                url "https://packagecloud.io/sarahBuisson/sarahbuisson/maven2"
-            }
-            google()
-            jcenter()
-            mavenLocal()}
+
         if (project.name != "website") {
 
            // repositories { maven {url  "https://packagecloud.io/sarahBuisson/sarahbuisson/maven2"}}
