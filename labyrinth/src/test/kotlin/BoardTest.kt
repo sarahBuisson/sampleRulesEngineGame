@@ -1,6 +1,7 @@
 import fr.perso.labyrinth.board.*
 import fr.perso.labyrinth.board.algorithm.*
 import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 import org.junit.Test
 
 class BoardTest {
@@ -24,7 +25,7 @@ class BoardTest {
                 Partie(Cursor(PointImpl(3, 3)), b)
         runBook(
                 partie,
-                Rules(
+                RulesImpl(
                         setOf(
                                 MoveWithoutCross(),
                                 Turn(),

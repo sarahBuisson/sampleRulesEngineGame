@@ -26,7 +26,7 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-test"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
                 implementation "io.mockk:mockk:$mockkVersion"
-              //  implementation "org.jeasy:easy-rules-core-common:$rules_version"
+                implementation "org.jeasy:easy-rules-api:$rules_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$koltinxSerializationVersion"
             }
         }

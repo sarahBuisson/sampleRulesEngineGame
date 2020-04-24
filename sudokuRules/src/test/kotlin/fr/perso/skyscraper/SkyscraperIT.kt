@@ -4,6 +4,7 @@ import fr.perso.skyscraper.GenerationSkyScraperGrid
 import fr.perso.skyscraper.ResolveSkyScraperGrid
 import fr.perso.skyscraper.SkyScraperGrid
 import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 import org.junit.Test
 
 class SkyscraperIT {
@@ -25,7 +26,7 @@ class SkyscraperIT {
 
         println(grid.columns.first().first().getPossibles())
         println("---")
-        runBook(grid, Rules(setOf(ResolveSkyScraperGrid())))
+        runBook(grid, RulesImpl(setOf(ResolveSkyScraperGrid())))
         println(grid)
         println(grid.toStringPossi())
         println(grid.columns.first().first().getPossibles())
@@ -54,7 +55,7 @@ class SkyscraperIT {
 
         println(grid.columns.first().first().getPossibles())
         println("---")
-        runBook(grid, Rules(setOf(ResolveSkyScraperGrid())))
+        runBook(grid, RulesImpl(setOf(ResolveSkyScraperGrid())))
         println(grid)
         println(grid.toStringPossi())
         println(grid.columns.first().first().getPossibles())
@@ -81,7 +82,7 @@ class SkyscraperIT {
 
         println(grid.columns.first().first().getPossibles())
         println("---")
-        runBook(grid, Rules(setOf(ResolveSkyScraperGrid())))
+        runBook(grid, RulesImpl(setOf(ResolveSkyScraperGrid())))
         println(grid)
         println(grid.toStringPossi())
         println(grid.columns.first().first().getPossibles())
@@ -108,7 +109,7 @@ class SkyscraperIT {
 
         println(grid.columns.first().first().getPossibles())
         println("---")
-        runBook(grid, Rules(setOf(ResolveSkyScraperGrid())))
+        runBook(grid, RulesImpl(setOf(ResolveSkyScraperGrid())))
         println(grid)
         println(grid.toStringPossi())
         println(grid.columns.first().first().getPossibles())

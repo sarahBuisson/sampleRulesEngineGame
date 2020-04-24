@@ -4,6 +4,7 @@ import fr.perso.SCasePossible
 import fr.perso.rules.*
 import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 import org.jeasy.rules.core.BasicRule
 import kotlin.math.max
 
@@ -333,13 +334,13 @@ class RemoveUnrespectingCombination(
 
 class ResolveSkyScraperGrid() :
         ResolveGrid<Int, SkyScraperLine, SkyScraperGrid>() {
-    override var gridRules: Rules<out SkyScraperGrid> = Rules(
+    override var gridRules: Rules<out SkyScraperGrid> = RulesImpl(
             setOf(
                     //  UseRandomHypothesis(this::isGridPossibleValid, this::execute)
             )
     )
-    override var caseRules = Rules(setOf(OnePossibiliteSet<Int>()))
-    override var groupeRules: Rules<out SkyScraperLine> = Rules(
+    override var caseRules: Rules<SCasePossible<Int>> = RulesImpl(setOf(OnePossibiliteSet<Int>()))
+    override var groupeRules: Rules<out SkyScraperLine> = RulesImpl(
             setOf<Rule<SkyScraperLine>>(
                     OneViewVisibleRule(),
                     StairViewRule(),

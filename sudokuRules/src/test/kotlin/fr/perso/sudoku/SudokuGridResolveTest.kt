@@ -6,6 +6,7 @@ import fr.perso.initPossibleValues
 import fr.perso.rules.RemovePossibleLockFromTheGroup
 import fr.perso.rules.runBook
 import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 import org.junit.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -33,7 +34,7 @@ class SudokuGridResolveTest {
 
         println(grid.columns.first().first().getPossibles())
         println("---")
-        runBook(grid, Rules(setOf(ResolveSudokuGridMedium<Int>())))
+        runBook(grid, RulesImpl(setOf(ResolveSudokuGridMedium<Int>())))
         println(grid)
         println(grid.columns.first().first().getPossibles())
         assertEquals(grid.nbOfFreePossibilite(), grid.size())
@@ -51,7 +52,7 @@ class SudokuGridResolveTest {
 
         println(grid.columns.first().first().getPossibles())
         println("---")
-        runBook(grid, Rules(setOf(ResolveSudokuGridEasy<Int>())))
+        runBook(grid, RulesImpl(setOf(ResolveSudokuGridEasy<Int>())))
         println(grid)
         println(grid.columns)
         println(grid.columns.first().first().getPossibles())
@@ -89,7 +90,7 @@ class SudokuGridResolveTest {
             println("level ---")
 
 
-                runBook(grid, Rules(setOf(ResolveSudokuGridDifficult<Int>())))
+                runBook(grid, RulesImpl(setOf(ResolveSudokuGridDifficult<Int>())))
 
             println(grid)
             assertEquals(grid.nbOfFreePossibilite(), grid.size())
@@ -111,7 +112,7 @@ class SudokuGridResolveTest {
             println("level ---")
 
 
-                runBook(grid, Rules(setOf(ResolveSudokuGridDifficult<Int>())))
+                runBook(grid, RulesImpl(setOf(ResolveSudokuGridDifficult<Int>())))
 
             println(grid)
             assertEquals(grid.nbOfFreePossibilite(), grid.size())

@@ -5,6 +5,7 @@ import fr.perso.initPossibleValues
 import fr.perso.rules.RemoveSureValueFromTheRestOfTheGroup
 import fr.perso.rules.runBook
 import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -17,22 +18,22 @@ class SkyscraperGridResolveTest {
         val line = gridGenerated.column1.first()
 
         line.view = 1
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
         line.view = 2
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
         line.view = 3
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
 
         line.view = 4
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
 
 
         line.view = 5
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
     }
 
@@ -42,27 +43,27 @@ class SkyscraperGridResolveTest {
         val line = gridGenerated.column1.first()
 
         line.view = 1
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
 
 
         line.view = 2
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
         line.view = 3
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
 
         line.view = 4
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
 
 
         line.view = 5
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
         line.view = 6
-        runBook(line, Rules(setOf(RemovePossibleForViewGroup())))
+        runBook(line, RulesImpl(setOf(RemovePossibleForViewGroup())))
         println(line)
 
     }
@@ -75,7 +76,7 @@ class SkyscraperGridResolveTest {
 
         line.view = 2
         line.get(3).setValue(5)
-        runBook(line, Rules(setOf(
+        runBook(line, RulesImpl(setOf(
 
                 RemoveSureValueFromTheRestOfTheGroup(),
                 ComplexeVisiblePossibleRule()
@@ -91,7 +92,7 @@ class SkyscraperGridResolveTest {
 
         line.view = 2
         line.get(1).setValue(5)
-        runBook(line, Rules(setOf(
+        runBook(line, RulesImpl(setOf(
 
                 RemoveSureValueFromTheRestOfTheGroup(),
                 ComplexeVisiblePossibleRule())))
@@ -106,7 +107,7 @@ class SkyscraperGridResolveTest {
 
         line.view = 3
         line.get(4).setValue(5)
-        runBook(line, Rules(setOf(
+        runBook(line, RulesImpl(setOf(
                 RemovePossibleForViewGroup(),
                 RemoveSureValueFromTheRestOfTheGroup(),
                 ComplexeVisiblePossibleRule())))

@@ -117,7 +117,7 @@ class MoveWithoutCross : Move() {
 fun <T> runBook(fact: T, rules: Rules<T>) {
     InferenceRulesEngine<T>().fire(rules, fact)
 }
-
+/*
 fun main() {
 
     val factory = { x: Int, y: Int, b: Board<ZoneOfCoridor> ->
@@ -147,3 +147,4 @@ fun main() {
     println(b)
     println(partie)
 }
+*/

@@ -24,7 +24,7 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-test"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
                 implementation "io.mockk:mockk:$mockkVersion"
-              //  implementation "org.jeasy:easy-rules-core-common:$rules_version"
+                implementation "org.jeasy:easy-rules-api:$rules_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$koltinxSerializationVersion"
 
 
@@ -60,6 +60,7 @@ kotlin {
                 implementation "io.github.microutils:kotlin-logging:$kotlin_logging_version"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
                 implementation "org.jetbrains.kotlin:kotlin-test-junit"
+                implementation "org.jeasy:easy-rules-api-jvm:$rules_version"
                 implementation "org.jeasy:easy-rules-core-jvm:$rules_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$koltinxSerializationVersion"
 
@@ -69,6 +70,7 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
                 implementation "io.github.microutils:kotlin-logging-js:$kotlin_logging_version"
+
                 implementation "org.jeasy:easy-rules-core-npm:$rules_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$koltinxSerializationVersion"
                 //implementation "org.jetbrains.kotlin:kotlin-test-js"
@@ -90,6 +92,7 @@ kotlin {
            //     implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
              //   implementation "io.github.microutils:kotlin-logging-common:$kotlin_logging_version"
             //    implementation "org.jetbrains.kotlin:kotlin-test-common"
+                implementation "org.jeasy:easy-rules-api-common:$rules_version"
                 implementation "org.jeasy:easy-rules-core-common:$rules_version"
                 //  implementation "io.mockk:mockk:1.7.17"
             }

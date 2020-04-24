@@ -32,26 +32,12 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-test"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
                 implementation "io.mockk:mockk:$mockkVersion"
-             //   implementation "org.jeasy:easy-rules-core-common:$rules_version"
+                implementation "org.jeasy:easy-rules-api:$rules_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$koltinxSerializationVersion"
 
 
             }
         }
-
-        /*commonTest {
-            kotlin.srcDir("src/test/kotlin")
-            dependencies {
-                implementation "io.github.microutils:kotlin-logging:$kotlin_logging_version"
-                implementation "org.jetbrains.kotlin:kotlin-stdlib"
-                implementation "org.jetbrains.kotlin:kotlin-test"
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
-                implementation "io.mockk:mockk:1.9"
-                implementation "io.mockk:mockk-common:1.9"
-            //    implementation(project(":easy-rules-core"))
-            }
-        }*/
-
 
         jvmTest {//TODO : commonTest instead of jvmtest, wwhen mockk.js will be better at it
             kotlin.srcDir("src/test/kotlin")
@@ -68,6 +54,7 @@ kotlin {
                 implementation "io.github.microutils:kotlin-logging:$kotlin_logging_version"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
                 implementation "org.jetbrains.kotlin:kotlin-test-junit"
+                implementation "org.jeasy:easy-rules-api-jvm:$rules_version"
                 implementation "org.jeasy:easy-rules-core-jvm:$rules_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$koltinxSerializationVersion"
 
@@ -98,6 +85,7 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
                 implementation "io.github.microutils:kotlin-logging-common:$kotlin_logging_version"
                 implementation "org.jetbrains.kotlin:kotlin-test-common"
+                implementation "org.jeasy:easy-rules-api-common:$rules_version"
                 implementation "org.jeasy:easy-rules-core-common:$rules_version"
                 //  implementation "io.mockk:mockk:1.7.17"
             }

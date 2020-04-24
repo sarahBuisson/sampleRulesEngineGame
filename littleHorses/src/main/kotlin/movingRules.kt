@@ -1,4 +1,5 @@
 import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 import org.jeasy.rules.core.BasicRule
 import org.jeasy.rules.core.DefaultRulesEngine
 
@@ -149,7 +150,7 @@ class lastcaseOccupedByAHorse() : BasicRule<MovingFact>() {
 
 //getAPossibleDestination for a horse. Don't move-it
 val rulesPossibleMove =
-        Rules<MovingFact>(
+        RulesImpl<MovingFact>(
                 setOf(
                         moveStableRule(),
                         goToStableRule(),

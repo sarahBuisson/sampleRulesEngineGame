@@ -4,6 +4,7 @@ import fr.perso.SCasePossible
 import fr.perso.rules.*
 import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 
 
 open class ResolveSudokuGridEasy<Type> : ResolveSudokuGrid<Type> {
@@ -39,13 +40,13 @@ open class ResolveSudokuGridDifficult<Type> : ResolveSudokuGrid<Type> {
 
 open class ResolveSudokuGrid<Type>() :
         ResolveGrid<Type, Iterable<SCasePossible<Type>>, SudokuGrid<Type>>() {
-    override var caseRules = Rules(setOf(OnePossibiliteSet<Type>()))
-    override var groupeRules: Rules<out Iterable<SCasePossible<Type>>> = Rules(
+    override var caseRules: Rules<SCasePossible<Type>> = RulesImpl(setOf(OnePossibiliteSet<Type>()))
+    override var groupeRules: Rules<out Iterable<SCasePossible<Type>>> = RulesImpl(
             setOf(
                     RemoveSureValueFromTheRestOfTheGroup<Type, Iterable<SCasePossible<Type>>>()
             )
     )
-    override var gridRules: Rules<out SudokuGrid<Type>> = Rules<SudokuGrid<Type>>()
+    override var gridRules: Rules<out SudokuGrid<Type>> = RulesImpl<SudokuGrid<Type>>()
 
     override fun isGridPossibleValid(grid: SudokuGrid<Type>): Boolean {
 

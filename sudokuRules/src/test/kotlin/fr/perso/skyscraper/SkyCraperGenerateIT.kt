@@ -3,7 +3,7 @@ import fr.perso.rules.runBook
 import fr.perso.skyscraper.GenerationSkyScraperGrid
 import fr.perso.skyscraper.ResolveSkyScraperGrid
 import fr.perso.skyscraper.SkyScraperGrid
-import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 import org.junit.Test
 
 class SkyCraperGenerateIT {
@@ -35,7 +35,7 @@ class SkyCraperGenerateIT {
     fun generateAndResolveGrid6() {
         val gridGenerated = SkyScraperGrid(6, initPossibleValues(6));
 
-        runBook(gridGenerated, Rules(setOf(GenerationSkyScraperGrid())))
+        runBook(gridGenerated, RulesImpl(setOf(GenerationSkyScraperGrid())))
         println(gridGenerated)
         val gridToResolve = SkyScraperGrid(6, initPossibleValues(6));
         gridGenerated.groups.forEachIndexed { index, skyScraperLine ->
@@ -49,7 +49,7 @@ class SkyCraperGenerateIT {
 
 
         println(gridToResolve)
-        runBook(gridToResolve, Rules(setOf(ResolveSkyScraperGrid())))
+        runBook(gridToResolve, RulesImpl(setOf(ResolveSkyScraperGrid())))
         println(gridToResolve.toStringPossi())
         println(gridToResolve.toStringExport())
         println(gridToResolve)
@@ -60,7 +60,7 @@ class SkyCraperGenerateIT {
     fun generateAndResolveGrid5() {
         val gridGenerated = SkyScraperGrid(5, initPossibleValues(5));
 
-        runBook(gridGenerated, Rules(setOf(GenerationSkyScraperGrid())))
+        runBook(gridGenerated, RulesImpl(setOf(GenerationSkyScraperGrid())))
         println(gridGenerated)
         val gridToResolve = SkyScraperGrid(5, initPossibleValues(5));
         gridGenerated.groups.forEachIndexed { index, skyScraperLine ->
@@ -125,7 +125,7 @@ class SkyCraperGenerateIT {
 
 
         println(gridToResolve)
-        runBook(gridToResolve, Rules(setOf(ResolveSkyScraperGrid())))
+        runBook(gridToResolve, RulesImpl(setOf(ResolveSkyScraperGrid())))
         println(gridToResolve.toStringPossi())
         println(gridToResolve.toStringExport())
         println(gridToResolve)

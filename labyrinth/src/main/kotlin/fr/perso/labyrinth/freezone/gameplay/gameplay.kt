@@ -3,7 +3,8 @@ package fr.perso.labyrinth.freezone.gameplay
 import fr.perso.labyrinth.GeoZone
 import fr.perso.labyrinth.freezone.generation.*
 import fr.perso.labyrinth.freezone.model.*
-import org.jeasy.rules.api.Rules
+import org.jeasy.rules.api.Rule
+import org.jeasy.rules.core.RulesImpl
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.core.LambdaRule
 
@@ -80,7 +81,7 @@ class ExchangeObjectRule :
                 })
 
 
-val ruleBook = Rules(setOf(MoveRule(), MoveClosedDoorRule(), TakeObjectRule(), ExchangeObjectRule()))
+val ruleBook = RulesImpl(setOf(MoveRule(), MoveClosedDoorRule(), TakeObjectRule(), ExchangeObjectRule()))
 
 
 fun playerInteractWith(partie: Partie, obj: ObjectZone): Partie {

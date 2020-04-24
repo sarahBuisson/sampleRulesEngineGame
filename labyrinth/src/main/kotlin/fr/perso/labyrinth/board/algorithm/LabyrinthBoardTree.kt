@@ -2,6 +2,7 @@ package fr.perso.labyrinth.board.algorithm
 
 import fr.perso.labyrinth.ConnectedZone
 import fr.perso.labyrinth.board.*
+import org.jeasy.rules.core.RulesImpl
 import org.jeasy.rules.api.Rules
 import org.jeasy.rules.core.DefaultRulesEngine
 import org.jeasy.rules.core.LambdaRule
@@ -81,7 +82,7 @@ fun <T : BoardZone> drawLab(board: Board<T>): Board<T> {
     val firstC = board.getNeigboursMap(board.start).entries.random()
     board.start.connectZone(firstC.value!!, firstC.key);
     var countFreeCase = board.toList().size;
-    val rules = Rules(setOf(
+    val rules = RulesImpl(setOf(
             ruleConnectEndCaseToAFreeNeighboor,
             ruleConnectUnconnectedCaseToBestConnectedNei
     ))

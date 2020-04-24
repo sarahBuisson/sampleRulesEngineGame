@@ -1,4 +1,5 @@
 import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 import org.jeasy.rules.core.BasicRule
 import org.jeasy.rules.core.DefaultRulesEngine
 
@@ -19,7 +20,7 @@ class NextPlayerRule : BasicRule<TurnFacts>() {
 }
 
 
-val turnRules = Rules(setOf(NextPlayerRule()))
+val turnRules = RulesImpl(setOf(NextPlayerRule()))
 
 fun whoIsTheTurn(partie: Partie, player: Player, dice: Int): Player {
     val fact = TurnFacts(dice, player, partie)

@@ -2,8 +2,10 @@ package fr.perso.rules
 
 import fr.perso.Grid
 import fr.perso.SCasePossible
+import org.jeasy.rules.api.RulesEngine
 import org.jeasy.rules.api.Rule
 import org.jeasy.rules.api.Rules
+import org.jeasy.rules.core.RulesImpl
 import org.jeasy.rules.core.BasicRule
 import org.jeasy.rules.core.DefaultRulesEngine
 import kotlin.math.min
@@ -355,21 +357,21 @@ abstract class ResolveGrid<Type,
 
 
     fun run(grid: GridType) {
-        runBook(grid, Rules(setOf(this)))
+        runBook(grid, RulesImpl(setOf(this)))
     }
 
     fun addCaseRule(rule: Rule<SCasePossible<Type>>) {
-        this.caseRules = Rules(this.caseRules.toSet() + rule)
+        this.caseRules = RulesImpl(this.caseRules.toSet() + rule)
     }
 
     fun addGroupeRule(rule: Rule<out GroupType>) {
         val rules = this.groupeRules.toSet() + rule
-        this.groupeRules = Rules(rules as Set<Rule<Nothing>>)
+        this.groupeRules = RulesImpl(rules as Set<Rule<Nothing>>)
     }
 
     fun addGridRule(rule: Rule<out GridType>) {
         val rules = this.gridRules.toSet() + rule
-        this.gridRules = Rules(rules as Set<Rule<Nothing>>)
+        this.gridRules = RulesImpl(rules as Set<Rule<Nothing>>)
     }
 
     fun addAllRules(otherResolver: ResolveGrid<Type, GroupType, GridType>) {
