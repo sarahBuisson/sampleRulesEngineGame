@@ -63,10 +63,10 @@
     "kotlin-stdlib": "org.jetbrains.kotlin:kotlin-stdlib-js:1.3.70",
     "kotlin-stdlib-js": "org.jetbrains.kotlin:kotlin-stdlib-js:1.3.70",
     "kotlinx-serialization-kotlinx-serialization-runtime": "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0",
-    "easy-rules-core": "org.jeasy:easy-rules-core-npm:3.2.4-snapshot",
-    "easy-rules-api": "org.jeasy:easy-rules-api-npm:3.2.4-snapshot",
-    "easy-rules-kotlin-easy-rules-core": "org.jeasy:easy-rules-core-npm:3.2.4-snapshot",
-    "easy-rules-kotlin-easy-rules-api": "org.jeasy:easy-rules-api-npm:3.2.4-snapshot"
+    "easy-rules-core": "org.jeasy:easy-rules-core-npm:3.2.4-SNAPSHOT",
+    "easy-rules-api": "org.jeasy:easy-rules-api-npm:3.2.4-SNAPSHOT",
+    "easy-rules-kotlin-easy-rules-core": "org.jeasy:easy-rules-core-npm:3.2.4-SNAPSHOT",
+    "easy-rules-kotlin-easy-rules-api": "org.jeasy:easy-rules-api-npm:3.2.4-SNAPSHOT"
   },
   "jarDependencies": {
     "sudoku": "../sudokuRules/build/libs/sudokuRules-npm-1.0.0-SNAPSHOT.jar",
