@@ -77,6 +77,7 @@
     "https://kotlin.bintray.com/kotlinx/",
     "https://kotlin.bintray.com/kotlinx/",
     "https://dl.bintray.com/kotlin/kotlinx/",
+    "packagecloud+https://packagecloud.io/sarahBuisson/snapshot",
     "packagecloud+https://packagecloud.io/sarahBuisson/sarahbuisson"
   ],
   "description": ""

@@ -27,7 +27,7 @@ pluginManagement {
     repositories {
         mavenLocal()
         maven {
-            url "https://packagecloud.io/sarahBuisson/sarahbuisson/maven2"
+            url "https://packagecloud.io/sarahBuisson/snapshot/maven2"
         }
         google()
         jcenter()
