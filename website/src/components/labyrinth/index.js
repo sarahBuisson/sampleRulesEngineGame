@@ -3,8 +3,8 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 
 import {bindActionCreators} from "redux";
-import {kotlinProxy} from "../../util";
-import {newLabObj, newLab, newPartiePointNClick, play, selectObj} from "../../services/actions";
+import {kotlinProxy, printProxyModel} from "../../util";
+import {newGridLabObj, newLab, play, selectObj} from "../../services/actions";
 
 class Labyrinth extends Component {
     constructor() {
@@ -12,7 +12,7 @@ class Labyrinth extends Component {
     }
 
     handleNewGame() {
-        this.props.newLabObj(6);
+        this.props.newPartie(6);
     };
 
     handleNewLab() {
@@ -62,7 +62,8 @@ function mapDispatchToProps(dispatch) {
 };
 
 function mapStateToProps(state, ownProps) {
-
+    console.log("mapStateToProps")
+    console.log(state)
     return {
         ...ownProps,
         currentPartie: this.state.currentLabPartie

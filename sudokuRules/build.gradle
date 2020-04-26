@@ -83,7 +83,7 @@ kotlin {
         metadata {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
-                implementation "io.github.microutils:kotlin-logging-common:$kotlin_logging_version"
+               // implementation "io.github.microutils:kotlin-logging-common:$kotlin_logging_version"
                 implementation "org.jetbrains.kotlin:kotlin-test-common"
                 implementation "org.jeasy:easy-rules-api-common:$rules_version"
                 implementation "org.jeasy:easy-rules-core-common:$rules_version"

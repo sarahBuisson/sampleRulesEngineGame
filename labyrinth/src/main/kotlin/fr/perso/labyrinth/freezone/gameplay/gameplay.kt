@@ -15,29 +15,49 @@ data class Player(
 )
 
 
-class Partie(val player: Player, val level: List<GeoZone>)
+class Partie<LevelType>(val player: Player, val level:LevelType)
 
 
-fun initLab(size: Int = 5): Partie {
+fun initLab(size: Int = 5): Partie<*> {
     val lab = createLab(size)
     LabFiller<FreeZone>()
-            .init(lab, lab.first(), size, 0)
-            .fillLab(lab, lab.first(), size, 0);
+            .init(lab, lab.first(),lab.last(), size, 0)
+            .fillLab();
     return Partie(Player(lab.first()), lab)
 }
 
-fun initPartie(size: Int = 5): Partie {
+fun initPartie(size: Int = 5): Partie<List<FreeZone>> {
     val lab = createLab(size)
-    LabFiller<FreeZone>().fillLab(lab, lab.first(), size, size);
+    LabFiller<FreeZone>()
+            .init(lab, lab.first(), lab.last(), size, size)
+            .fillLab();
     return Partie(Player(lab.first()), lab)
 }
+
+
+fun initPartieExit(size: Int = 5): Partie<List<FreeZone>> {
+    val lab = createLab(size)
+    val keyToDoorArray= mutableListOf<Array<String>>()
+    val objetDiversArray= mutableListOf<String>()
+
+    for (i in 0..size){
+
+        keyToDoorArray.add(arrayOf(""+i.toChar(),""+i.toChar().toUpperCase()))
+        objetDiversArray.add(""+(size+i).toChar())
+
+    }
+    LabFillerExit<FreeZone>(keyToDoorArray.toTypedArray(), objetDiversArray.toTypedArray())
+            .init(lab, lab.first(), lab.random(), size,size/2).fillLab();
+    return Partie(Player(lab.first()), lab)
+}
+
 
 
 class Interaction<Qui, Quoi, Comment, Univers>(val qui: Qui, val quoi: Quoi, val comment: Comment, val univers: Univers)
 
 
 class MoveRule :
-        LambdaRule<Interaction<Player, Any, Any, Partie>>(
+        LambdaRule<Interaction<Player, Any, Any, Partie<*>>>(
                 { interaction ->
                     interaction.quoi is DoorObjectZone && interaction.quoi.key == null && interaction.qui.location.content.contains(interaction.quoi)
                 },
@@ -47,7 +67,7 @@ class MoveRule :
 
 
 class MoveClosedDoorRule :
-        LambdaRule<Interaction<Player, Any, Any, Partie>>(
+        LambdaRule<Interaction<Player, Any, Any, Partie<*>>>(
                 { interaction ->
                     MoveRule::evaluate.call(interaction)
                             && interaction.qui.inventory.contains((interaction.quoi as DoorObjectZone).key)
@@ -58,7 +78,7 @@ class MoveClosedDoorRule :
 
 
 class TakeObjectRule :
-        LambdaRule<Interaction<Player, Any, Any, Partie>>(
+        LambdaRule<Interaction<Player, Any, Any, Partie<*>>>(
                 { interaction ->
                     interaction.quoi is KeyObjectZone
                 },
@@ -68,7 +88,7 @@ class TakeObjectRule :
                 })
 
 class ExchangeObjectRule :
-        LambdaRule<Interaction<Player, Any, Any, Partie>>(
+        LambdaRule<Interaction<Player, Any, Any, Partie<*>>>(
                 { interaction ->
                     interaction.quoi is ExchangeObjectZone &&
                             interaction.qui.selected == interaction.quoi.want

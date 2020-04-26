@@ -1,10 +1,9 @@
+package fr.perso.sudoku
+
 import fr.perso.SCasePossible
 import fr.perso.rules.*
 import fr.perso.skyscraper.SkyScraperGrid
-import fr.perso.sudoku.ResolveSudokuGrid
-import fr.perso.sudoku.ResolveSudokuGridMedium
-import fr.perso.sudoku.SudokuGrid
-import fr.perso.sudoku.resolveGrid
+import fr.perso.sudoku.service.resolveGrid
 
 fun <Type> generateFullSudoku(grid: SudokuGrid<Type>, resolver: ResolveSudokuGrid<Type> = ResolveSudokuGridMedium()): SudokuGrid<Type> {
     val newL = ArrayList(grid.possibles).shuffled()
@@ -14,13 +13,10 @@ fun <Type> generateFullSudoku(grid: SudokuGrid<Type>, resolver: ResolveSudokuGri
         grid.get(0, 1).setValue(possible)
 
     }
-    println(grid)
     val generator = GenerationSudokuGridFull<Type>()
 
     generator.addAllRules(resolver)
     generator.run(grid)
-    println(grid.toStringPossi())
-    println(grid)
     grid.forEach { it.solution = it.getValue() }
 
     return resolveGrid(grid)

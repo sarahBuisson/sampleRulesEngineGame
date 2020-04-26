@@ -1,0 +1,55 @@
+import groovy.json.*
+
+buildscript {
+
+}
+
+plugins {
+    id "java" //need for the "from"
+    id "org.jetbrains.kotlin.multiplatform"
+    id "java-library"
+    id("maven-publish")
+    // id "kotlin-platform-js"
+    //id "org.jetbrains.kotlin.frontend"
+    id "kotlin-multiplatform"
+
+}
+
+kotlin {
+    targets {
+        fromPreset(presets.js, "js") {
+            compilations.all {
+                tasks[compileKotlinTaskName].kotlinOptions {
+                }
+            }
+        }
+    }
+    sourceSets {
+        jsMain {
+            kotlin.srcDir("src/main/kotlin")
+            resources.srcDir("src/main/resource")
+
+            dependencies {
+                implementation "io.github.microutils:kotlin-logging-js:$kotlin_logging_version"
+            }
+        }
+    }
+    js() {
+        browser {}
+        mavenPublication {
+            artifactId project.name + "-js"
+        }
+        compilations.main.kotlinOptions {
+            // Setup the Kotlin compiler options for the "main" compilation:
+            moduleKind = "umd"
+        }
+    }
+}
+
+
+task listrepos {
+    doLast {
+        println "Repositories:"
+        project.repositories.each { println "Name: " + it.name + "; url: " + it.url }
+    }
+}

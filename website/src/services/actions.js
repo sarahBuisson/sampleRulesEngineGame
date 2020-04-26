@@ -23,6 +23,15 @@ export function newLab(size) {
     return updateStateAction('currentLabPartie', newPartie)
 }
 
+export function newSudoku(size) {
+    const newPartie = sudoku.initPartie(size);
+    return updateStateAction('currentSudokuPartie', newPartie)
+}
+export function resoslveGrid(grid) {
+    const newPartie = sudoku.fr.perso.sudoku.initPartie(size);
+    return updateStateAction('currentSudokuPartie', newPartie)
+}
+
 export function newLabObj(size) {
 
     console.log(labyrinth.fr.perso.labyrinth)

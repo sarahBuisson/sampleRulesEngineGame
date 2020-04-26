@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 
-export function kotlinProxy(kotlinInstance, goDeep = true) {
+export function kotlinProxy(kotlinInstance, goDeep = true, autoProxyMethod = true) {
     if (kotlinInstance === undefined || kotlinInstance === null) {
         return kotlinInstance
     } else if (typeof kotlinInstance === 'function') {
@@ -8,14 +8,15 @@ export function kotlinProxy(kotlinInstance, goDeep = true) {
         return (...args) => {
 
             const retourMethod = kotlinInstance.apply(null, args)
-            return kotlinProxy(retourMethod, goDeep);
+            if(autoProxyMethod)
+            return kotlinProxy(retourMethod, goDeep, autoProxyMethod);
+            else return retourMethod;
 
         }
     } else if (typeof kotlinInstance !== 'object') {
         return kotlinInstance
     } else {
         let className = get(kotlinInstance, '__proto__.constructor.name');
-
 
         if (className === 'ArrayList') {
             let arrayName = Object.getOwnPropertyNames(kotlinInstance)
@@ -24,7 +25,7 @@ export function kotlinProxy(kotlinInstance, goDeep = true) {
                 })[0];
             return kotlinInstance[arrayName].map((item) => {
                 if (goDeep) {
-                    return kotlinProxy(item, goDeep)
+                    return kotlinProxy(item, goDeep, autoProxyMethod)
                 } else {
                     return item;
 
@@ -32,9 +33,7 @@ export function kotlinProxy(kotlinInstance, goDeep = true) {
             })
         } else {
 
-            let newkotlinInstance = {}
-
-            console.log(Object.getOwnPropertyNames(kotlinInstance))
+            let newkotlinInstance = {};
             Object.getOwnPropertyNames(kotlinInstance).forEach(
                 (oldName) => {
                     let newName = oldName.replace(/\_\S*\$/, "").replace(/\_\d/, "");
@@ -47,7 +46,7 @@ export function kotlinProxy(kotlinInstance, goDeep = true) {
                         try {
 
                             if (goDeep || propertyclassName === 'ArrayList') {
-                                newkotlinInstance[newName] = kotlinProxy(kotlinInstance[oldName], goDeep)
+                                newkotlinInstance[newName] = kotlinProxy(kotlinInstance[oldName], goDeep, autoProxyMethod)
                             } else {
                                 newkotlinInstance[newName] = kotlinInstance[oldName]
                             }
@@ -58,14 +57,22 @@ export function kotlinProxy(kotlinInstance, goDeep = true) {
                     }
 
                 }
-            )
-
+            );
             return newkotlinInstance
         }
-
-
     }
-
     return kotlinInstance;
+}
+
+export function printProxyModel(obj, indentation = "") {
+
+    return Object.keys(obj).map(key => {
+
+        if (key.endsWith("Array")) {
+            return printProxyModel(obj[key][0]);
+        }
+        return key;
+
+    })
 }
 

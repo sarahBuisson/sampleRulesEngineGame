@@ -1,8 +1,12 @@
 import fr.perso.labyrinth.board.*
 import fr.perso.labyrinth.board.algorithm.*
 import fr.perso.labyrinth.board.algorithm.composite.CompositeZone
+import fr.perso.labyrinth.board.algorithm.composite.LevelBoard
 import fr.perso.labyrinth.board.algorithm.composite.generateComposite
 import fr.perso.labyrinth.board.algorithm.composite.generateCompositeMapLabWithKey
+import fr.perso.labyrinth.board.algorithm.dataMap.distanceMap
+import fr.perso.labyrinth.board.algorithm.dataMap.complexiteMap
+import fr.perso.labyrinth.board.algorithm.dataMap.coridorSizeDistanceMap
 import fr.perso.labyrinth.freezone.model.DoorObjectZone
 import fr.perso.labyrinth.freezone.model.KeyObjectZone
 import junit.framework.Assert.assertEquals
@@ -20,7 +24,7 @@ class BoardTreeLabTest {
                     y
             )
         }
-        val board = Board<BoardZone>(
+        val board = LevelBoard<BoardZone>(
                 10, 10, factory
         )
         //When
@@ -29,7 +33,7 @@ class BoardTreeLabTest {
         //Then
         println(labyrinthTreeToString(board))
         println("----")
-        val distance = distance(board.start, board)
+        val distance = distanceMap(board.start, board)
         println(labyrinthTreeToString(board, { distance.get(it) }))
         println("----")
         val complexite = complexiteMap(board.start, board)

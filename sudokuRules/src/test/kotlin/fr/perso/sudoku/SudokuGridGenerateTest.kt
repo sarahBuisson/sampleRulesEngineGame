@@ -1,10 +1,9 @@
 package fr.perso.sudoku;
 
 
-import ResolvePartialSudokyGrid
 import fr.perso.initPossibleValues
-import generateCleanedSudoku
-import generateFullSudoku
+import fr.perso.sudoku.service.generateCleanedGrid
+import fr.perso.sudoku.service.resolveGrid
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -60,18 +59,15 @@ class SudokuGridGenerateTest {
         println(resolved)
     }
 
-@Ignore
     @Test
     fun shouldGenerateAndCleanFull33Easy() {
 
-        var grid = generateFullSudoku(SudokuGrid(3, 3, initPossibleValues(3 * 3)))
-        println(grid)
-        var gridClean = generateCleanedSudoku(grid, 30, ResolveSudokuGridEasy<Int>())
-        println(gridClean)
-        var resolved = resolveGrid(gridClean)
+    var gridClean = generateCleanedGrid(3, 3, 30)
+    println(gridClean)
+    var resolved = resolveGrid(gridClean)
 
-        println("resolvedGrid")
-        println(resolved)
+    println("resolvedGrid")
+    println(resolved)
     }
 
 @Ignore// sometime fail

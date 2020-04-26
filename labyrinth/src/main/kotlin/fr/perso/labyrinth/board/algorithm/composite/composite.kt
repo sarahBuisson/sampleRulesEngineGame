@@ -18,39 +18,42 @@ class CompositeZone(x: Int, y: Int) : GeoZone, ConnectedZone, BoardZone, BoardZo
 
 }
 
+class LevelBoard<T : Any>(width: Int, height: Int, factory: (x: Int, y: Int, board: Board<T>) -> T) : Board<T>(width, height, factory) {
+    lateinit var start: T
+    lateinit var exit: T
+}
 
-fun generateComposite(size: Int): Board<CompositeZone> {
+fun generateComposite(size: Int): LevelBoard<CompositeZone> {
     val factory = { x: Int, y: Int, b: Board<CompositeZone> ->
         CompositeZone(
                 x,
                 y
         )
     }
-    val board = Board<CompositeZone>(
+    val board = LevelBoard<CompositeZone>(
             10, 10, factory
     )
-    //When
+    //
     drawLab(board)
     chooseStartExit(board)
-
     var doorWithKey = ('A'..'Z').map { arrayOf("" + it, "" + it.toLowerCase()) }.toTypedArray()
 
 
     LabFiller<CompositeZone>(doorWithKey)
-            .init(board.toList(), board.start, 10, 0)
-            .fillLab(board.toList(), board.start, 10, 0)
+            .init(board.toList(), board.start, board.exit, 10, 0)
+            .fillLab()
     return board
 }
 
 
-fun generateCompositeMapLabWithKey(size: Int): Board<CompositeZone> {
+fun generateCompositeMapLabWithKey(size: Int): LevelBoard<CompositeZone> {
     val factory = { x: Int, y: Int, b: Board<CompositeZone> ->
         CompositeZone(
                 x,
                 y
         )
     }
-    val board = Board<CompositeZone>(
+    val board = LevelBoard<CompositeZone>(
             10, 10, factory
     )
     //When
@@ -61,14 +64,14 @@ fun generateCompositeMapLabWithKey(size: Int): Board<CompositeZone> {
 
 
     LabFillerMapLab<CompositeZone>(doorWithKey, board = board)
-            .init(board.toList(), board.start, 10, 0)
-            .fillLab(board.toList(), board.start, 10, 0)
+            .init(board.toList(), board.start,board.exit,10, 0)
+            .fillLab()
     return board
 }
 
 
-fun initPartieComposite(size: Int = 5): Partie {
+fun initPartieComposite(size: Int = 5): Partie<LevelBoard<CompositeZone>> {
     var lab = generateComposite(size)
-    return Partie(Player(lab.start), lab.toList())
+    return Partie(Player(lab.start), lab)
 }
 

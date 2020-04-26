@@ -51,9 +51,7 @@ open class BoardZoneImpl(override val x: Int, override val y: Int) : PointImpl(x
 }
 
 
-class Board<T : Any> {
-    lateinit var start: T
-    var exit: T? = null
+open class Board<T : Any> {
     val width: Int
     val height: Int
 
@@ -159,10 +157,9 @@ val defaultDoorName: (Direction, BoardZone) -> Any = { d, zone ->
 }
 
 fun <T : BoardZone> labyrinthTreeToString(board: Board<T>, zoneName: (T) -> Any? = defaultZoneName, doorName: (Direction, T) -> Any? = defaultDoorName): String {
-    val start = "$"
-    val exit = "€"
 
-    var str = "start: $start exit: $exit /n"
+
+    var str = ""
 
     str += board.content.map {
 
@@ -172,15 +169,8 @@ fun <T : BoardZone> labyrinthTreeToString(board: Board<T>, zoneName: (T) -> Any?
 
             r += doorName(Direction.LEFT, zone)
 
-            if (zone == board.start) {
+            r += zoneName(zone)
 
-                r += start
-            } else if (zone == board.exit) {
-
-                r += exit
-            } else {
-                r += zoneName(zone)
-            }
             r += doorName(Direction.RIGHT, zone);
 
             r

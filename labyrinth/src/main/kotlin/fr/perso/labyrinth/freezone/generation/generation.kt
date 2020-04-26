@@ -9,13 +9,17 @@ import fr.perso.labyrinth.freezone.model.DoorObjectZone
 import fr.perso.labyrinth.freezone.model.ExchangeObjectZone
 import fr.perso.labyrinth.freezone.model.KeyObjectZone
 import objetDiversDefault
+import kotlin.properties.Delegates
 
-/** draw a lab where zone are linked each to another, without notion of x-y*/
+/** draw a lab where zone are linked each to another, without notion of x-y
+ *
+ * and with an "exit, a place with a "victoire" object
+ * */
 
 
 open class LabFillerExit<T>(
         keyToDoorArray: Array<Array<String>> = doorWithKeyDefault,
-        objetDiversArray: Array<String> = objetDiversDefault, val board: Board<T>
+        objetDiversArray: Array<String> = objetDiversDefault
 ) :
         LabFiller<T>(keyToDoorArray, objetDiversArray)
         where T : GeoZone, T : ConnectedZone {
@@ -27,15 +31,13 @@ open class LabFillerExit<T>(
     }
 
     override fun fillLab(
-            zones: List<T>, start: T, numberOfDoor: Int, numberOfExchanges: Int
     ) {
-        val exit = board.exit
         exit!!.content.add(KeyObjectZone("victoire"))
 
         val pathToExit = extractPathFromStartToExit(exit)
         fillPathWithClosedDoor(pathToExit, listOfKey.subList(0, listOfKey.size / 2))
         println("pathFilled")
-        fillLabWithDoors(numberOfDoor, zones, listOfKey.subList(listOfKey.size / 2, listOfKey.size))
+        fillLabWithDoors(listOfKey.subList(listOfKey.size / 2, listOfKey.size))
 
 
     }
@@ -76,8 +78,12 @@ open class LabFillerExit<T>(
 open class LabFiller<TZone>
         where TZone : GeoZone, TZone : ConnectedZone {
 
+     lateinit var zones: List<TZone>
     lateinit var distanceFromStartMap: Map<ConnectedZone, Int>
+    var numberOfDoor by Delegates.notNull<Int>()
+    var numberOfExchanges by Delegates.notNull<Int>()
     lateinit var begin: TZone
+    lateinit var exit: TZone
     var keyToDoor: MutableList<Pair<String, String>>;
     var objetDivers: MutableList<String>;
     var listOfKey: MutableList<String>;
@@ -92,10 +98,14 @@ open class LabFiller<TZone>
     }
 
 
-    open public fun init(zones: List<TZone>, begin: TZone = zones.first(), numberOfDoor: Int, numberOfExchanges: Int): LabFiller<TZone> {
+    open public fun init(zones: List<TZone>, begin: TZone = zones.first(), exit: TZone = zones.last(), numberOfDoor: Int, numberOfExchanges: Int): LabFiller<TZone> {
 
-        this.begin = begin
+        this.begin=begin
+        this.exit=exit
         distanceFromStartMap = distanceToZone(begin);
+        this.zones=zones;
+        this.numberOfDoor=numberOfDoor;
+        this.numberOfExchanges=numberOfExchanges;
 
         zones.forEach { zone ->
             zone.connected.forEach {
@@ -107,12 +117,10 @@ open class LabFiller<TZone>
     }
 
     open public fun fillLab(
-            zones: List<TZone>, begin: TZone = zones.first(), numberOfDoor: Int, numberOfExchanges: Int
-    ) {
+            ) {
 
 
-        this.init(zones, begin, numberOfDoor, numberOfExchanges);
-        fillLabWithDoors(numberOfDoor, zones, this.listOfKey)
+        fillLabWithDoors(this.listOfKey)
 
         //And now the exchanges
 
@@ -140,7 +148,7 @@ open class LabFiller<TZone>
         }
     }
 
-    protected fun fillLabWithDoors(numberOfDoor: Int, zones: List<TZone>, listOfKey: MutableList<String>) {
+    protected fun fillLabWithDoors(listOfKey: MutableList<String>) {
         for (i in 1..numberOfDoor) {
             if (listOfKey.isEmpty())
                 return
@@ -224,7 +232,7 @@ open class LabFiller<TZone>
 class LabFillerMapLab<T>(
         keyToDoorArray: Array<Array<String>> = doorWithKeyDefault,
         objetDiversArray: Array<String> = objetDiversDefault, board: Board<T>
-) : LabFillerExit<T>(keyToDoorArray, objetDiversArray, board)
+) : LabFillerExit<T>(keyToDoorArray, objetDiversArray)
         where T : GeoZone, T : ConnectedZone {
 
 

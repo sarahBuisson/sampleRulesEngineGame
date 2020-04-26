@@ -6,18 +6,7 @@
 
 pluginManagement {
     resolutionStrategy {
-
-        println("resolutionStrategy")
-        println(this)
-        println(it)
-        println(this.class)
         eachPlugin {
-            println "this";
-            println it;
-            println it.class;
-            println this.class;
-            println requested.version
-            println requested.id.id
             if (requested.id.id == "kotlin-multiplatform") {
 
                 useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
@@ -33,9 +22,6 @@ pluginManagement {
                 useModule("com.android.tools.build:gradle:${requested.version}")
             }
         }
-        println(this.class)
-
-        //   println(this.pluginVersions)
     }
 
     repositories {
@@ -77,4 +63,5 @@ rootProject.name = 'multiGameSample'
 include(':sudokuRules')
 include(':labyrinth')
 include(':littleHorses')
+include(':logLevel')
 include(':website')
