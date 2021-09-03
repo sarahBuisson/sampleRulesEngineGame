@@ -40,7 +40,7 @@
   "dependencies": {
     "@babel/runtime": "^7.4.4",
     "@koa/cors": "^2.2.3",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "d3": "^5.7.0",
     "d3-force": "^2.0.1",
     "koa": "^2.7.0",
